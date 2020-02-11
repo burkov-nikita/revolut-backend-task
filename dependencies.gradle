@@ -1,9 +1,26 @@
 ext.lib = [
-        lombok: 'org.projectlombok:lombok:1.18.6'
+        guice           : "com.google.inject:guice:${guiceVersion}",
+        guice_servlet   : "com.google.inject.extensions:guice-servlet:${guiceVersion}",
+        guice_bridge    : "org.glassfish.hk2:guice-bridge:${guiceBridgeVersion}",
+        jersey_hk2      : "org.glassfish.jersey.inject:jersey-hk2:${jerseyVersion}",
+        jersey_server   : "org.glassfish.jersey.core:jersey-server:${jerseyVersion}",
+        jersey_container: "org.glassfish.jersey.containers:jersey-container-servlet:${jerseyVersion}",
+        jersey_jackson  : "org.glassfish.jersey.media:jersey-media-json-jackson:${jerseyVersion}"
 ]
 
 ext.lib_pack = [
+        guice : [
+                ext.lib.guice,
+                ext.lib.guice_servlet,
+                ext.lib.guice_bridge
+        ],
+        jersey: [
+                ext.lib.jersey_server,
+                ext.lib.jersey_container,
+                ext.lib.jersey_jackson,
+                ext.lib.jersey_hk2
+        ],
         common: [
-                ext.lib.lombok
+                
         ]
 ]

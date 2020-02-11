@@ -5,13 +5,31 @@ buildscript {
         }
         mavenCentral()
         mavenLocal()
+        dependencies {
+            classpath "gradle.plugin.org.gretty:gretty:3.0.1"
+        }
+
     }
 }
 
 apply plugin: 'java'
 apply plugin: 'idea'
+apply plugin: 'war'
+apply plugin: 'org.gretty'
+
+apply from: "${rootProject.projectDir}/dependencies.gradle"
+
+gretty {
+    contextPath  = '/api'
+}
 
 dependencies {
+
+    compile "javax.servlet:javax.servlet-api:${servletApiVersion}"
+
+    compile lib_pack.guice
+    compile lib_pack.jersey
+    compile lib_pack.common
 
 }
 
