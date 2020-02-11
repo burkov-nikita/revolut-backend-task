@@ -1,4 +1,4 @@
-package com.revolut.backend.task;
+package com.revolut.backend.task.modules;
 
 import com.google.inject.AbstractModule;
 

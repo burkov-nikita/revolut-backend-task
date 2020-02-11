@@ -1,26 +1,38 @@
 ext.lib = [
-        guice           : "com.google.inject:guice:${guiceVersion}",
-        guice_servlet   : "com.google.inject.extensions:guice-servlet:${guiceVersion}",
-        guice_bridge    : "org.glassfish.hk2:guice-bridge:${guiceBridgeVersion}",
-        jersey_hk2      : "org.glassfish.jersey.inject:jersey-hk2:${jerseyVersion}",
-        jersey_server   : "org.glassfish.jersey.core:jersey-server:${jerseyVersion}",
-        jersey_container: "org.glassfish.jersey.containers:jersey-container-servlet:${jerseyVersion}",
-        jersey_jackson  : "org.glassfish.jersey.media:jersey-media-json-jackson:${jerseyVersion}"
+        guice                   : "com.google.inject:guice:${guiceVersion}",
+        guice_servlet           : "com.google.inject.extensions:guice-servlet:${guiceVersion}",
+        guice_bridge            : "org.glassfish.hk2:guice-bridge:${guiceBridgeVersion}",
+        jersey_hk2              : "org.glassfish.jersey.inject:jersey-hk2:${jerseyVersion}",
+        jersey_server           : "org.glassfish.jersey.core:jersey-server:${jerseyVersion}",
+        jersey_container        : "org.glassfish.jersey.containers:jersey-container-servlet:${jerseyVersion}",
+        jersey_jackson          : "org.glassfish.jersey.media:jersey-media-json-jackson:${jerseyVersion}",
+        hibernate_jpa           : "org.hibernate.javax.persistence:hibernate-jpa-2.1-api:${hibernateJpa}",
+        h2                      : "com.h2database:h2:${h2Version}",
+        hibernate_core          : "org.hibernate:hibernate-core:${hibernateVersion}",
+        hibernate_entity_manager: "org.hibernate:hibernate-entitymanager:${hibernateVersion}",
+        guice_persist           : "com.google.inject.extensions:guice-persist:${guiceVersion}"
 ]
 
 ext.lib_pack = [
-        guice : [
+        guice_core : [
                 ext.lib.guice,
                 ext.lib.guice_servlet,
                 ext.lib.guice_bridge
         ],
-        jersey: [
+        jersey     : [
                 ext.lib.jersey_server,
                 ext.lib.jersey_container,
                 ext.lib.jersey_jackson,
                 ext.lib.jersey_hk2
         ],
-        common: [
-                
+        persistance: [
+                ext.lib.hibernate_jpa,
+                ext.lib.h2,
+                ext.lib.hibernate_core,
+                ext.lib.hibernate_entity_manager,
+                ext.lib.guice_persist
+        ],
+        common     : [
+
         ]
 ]

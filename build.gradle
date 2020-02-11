@@ -20,16 +20,17 @@ apply plugin: 'org.gretty'
 apply from: "${rootProject.projectDir}/dependencies.gradle"
 
 gretty {
-    contextPath  = '/api'
+    contextPath = '/api'
 }
 
 dependencies {
 
     compile "javax.servlet:javax.servlet-api:${servletApiVersion}"
 
-    compile lib_pack.guice
+    compile lib_pack.guice_core
     compile lib_pack.jersey
     compile lib_pack.common
+    compile lib_pack.persistance
 
 }
 
