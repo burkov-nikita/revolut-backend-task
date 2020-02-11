@@ -1,0 +1,9 @@
+ext.lib = [
+        lombok: 'org.projectlombok:lombok:1.18.6'
+]
+
+ext.lib_pack = [
+        common: [
+                ext.lib.lombok
+        ]
+]
