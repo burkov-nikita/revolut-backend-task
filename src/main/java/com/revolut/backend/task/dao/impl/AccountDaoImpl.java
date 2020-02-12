@@ -7,6 +7,7 @@ import com.revolut.backend.task.dao.AccountDao;
 import com.revolut.backend.task.entity.Account;
 
 import javax.persistence.EntityManager;
+import java.util.List;
 import java.util.Optional;
 
 public class AccountDaoImpl implements AccountDao {
@@ -17,6 +18,14 @@ public class AccountDaoImpl implements AccountDao {
     @Override
     public Account findBy(String id) {
         return entityManager.get().find(Account.class, id);
+    }
+
+    @Override
+    public List findBy(List ids) {
+        return entityManager.get()
+                .createQuery("SELECT account FROM Account WHERE a.id IN :ids")
+                .setParameter("ids", ids)
+                .getResultList();
     }
 
     @Override

@@ -10,7 +10,8 @@ ext.lib = [
         h2                      : "com.h2database:h2:${h2Version}",
         hibernate_core          : "org.hibernate:hibernate-core:${hibernateVersion}",
         hibernate_entity_manager: "org.hibernate:hibernate-entitymanager:${hibernateVersion}",
-        guice_persist           : "com.google.inject.extensions:guice-persist:${guiceVersion}"
+        guice_persist           : "com.google.inject.extensions:guice-persist:${guiceVersion}",
+        commons_lang            : 'org.apache.commons:commons-lang3:3.8'
 ]
 
 ext.lib_pack = [
@@ -33,6 +34,6 @@ ext.lib_pack = [
                 ext.lib.guice_persist
         ],
         common     : [
-
+                ext.lib.commons_lang
         ]
 ]
