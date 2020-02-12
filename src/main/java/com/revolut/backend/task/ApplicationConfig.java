@@ -2,8 +2,8 @@ package com.revolut.backend.task;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.revolut.backend.task.modules.JpaServletModule;
-import com.revolut.backend.task.modules.GuiceModule;
+import com.revolut.backend.task.modules.AccountingPersistModule;
+import com.revolut.backend.task.modules.ApplicationModule;
 import org.glassfish.hk2.api.ServiceLocator;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.jvnet.hk2.guice.bridge.api.GuiceIntoHK2Bridge;
@@ -20,8 +20,8 @@ public class ApplicationConfig extends ResourceConfig {
     public ApplicationConfig(ServiceLocator serviceLocator) {
         packages("com.revolut.backend.task");
         Injector injector =  Guice.createInjector(
-                new GuiceModule(),
-                new JpaServletModule()
+                new ApplicationModule(),
+                new AccountingPersistModule()
         );
         initGuiceIntoHK2Bridge(serviceLocator, injector);
     }
