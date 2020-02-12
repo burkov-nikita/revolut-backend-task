@@ -17,11 +17,15 @@ public class Account {
     @Column(name = "CURRENCY_ID")
     private Long currencyId;
 
-    @Column(name = "NUM")
+    @Column(name = "NUM", unique = true)
     private String num;
 
-    @Column(name = "INFO")
-    private String info;
+    @Column(name = "METADATA")
+    private String metadata;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "ACCOUNT_BALANCE_ID")
+    private AccountBalance accountBalance;
 
     public String getId() {
         return id;
@@ -31,12 +35,12 @@ public class Account {
         this.id = id;
     }
 
-    public String getInfo() {
-        return info;
+    public String getMetadata() {
+        return metadata;
     }
 
-    public void setInfo(String info) {
-        this.info = info;
+    public void setMetadata(String info) {
+        this.metadata = info;
     }
 
     public Long getCurrencyId() {
@@ -55,13 +59,23 @@ public class Account {
         this.num = num;
     }
 
+    public AccountBalance getAccountBalance() {
+        return accountBalance;
+    }
+
+    public void setAccountBalance(AccountBalance accountBalance) {
+        this.accountBalance = accountBalance;
+        accountBalance.setAccount(this);
+    }
+
     @Override
     public String toString() {
         return "Account{" +
                 "id='" + id + '\'' +
                 ", currencyId=" + currencyId +
                 ", num='" + num + '\'' +
-                ", info='" + info + '\'' +
+                ", metadata='" + metadata + '\'' +
+                ", accountBalance=" + accountBalance +
                 '}';
     }
 }
