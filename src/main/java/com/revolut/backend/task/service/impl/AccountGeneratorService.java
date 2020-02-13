@@ -11,11 +11,11 @@ import static org.apache.commons.lang3.StringUtils.leftPad;
 import static org.apache.commons.lang3.StringUtils.rightPad;
 
 @Singleton
-class AccountGeneratorService {
+public class AccountGeneratorService {
 
     private static final int CHECK_BIT = 0;
 
-    String generateAccountNumber(Account account) {
+    public String generateAccountNumber(Account account) {
         if (account.getCurrencyId() == null || account.getCurrencyId() == 0) {
             throw new MissedCurrencyIdException();
         }
