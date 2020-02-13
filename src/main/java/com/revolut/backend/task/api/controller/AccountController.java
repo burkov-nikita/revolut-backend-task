@@ -6,6 +6,8 @@ import com.revolut.backend.task.service.impl.AccountService;
 import javax.inject.Inject;
 import javax.ws.rs.*;
 
+import java.util.UUID;
+
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 
 @Path("/account")
@@ -24,13 +26,13 @@ public class AccountController {
 
     @GET
     @Path("{id}")
-    public Account getAccount(@PathParam("id") String id) {
+    public Account getAccount(@PathParam("id") UUID id) {
         return accountService.findBy(id);
     }
 
     @DELETE
     @Path("{id}")
-    public void removeAccount(@PathParam("id") String id) {
+    public void removeAccount(@PathParam("id") UUID id) {
         accountService.delete(id);
     }
 

@@ -6,28 +6,29 @@ import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
+import java.util.UUID;
 
 @MappedSuperclass
 public abstract class AbstractIdentifiableObject {
 
     @Id
-    @GeneratedValue(generator = "system-uuid")
-    @GenericGenerator(name = "system-uuid", strategy = "uuid")
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     @Column(name = "ID")
-    private String id;
+    private UUID id;
 
-    public String getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
     @Override
     public String toString() {
         return "AbstractIdentifiableObject{" +
-                "id='" + id + '\'' +
+                "id=" + id +
                 '}';
     }
 }

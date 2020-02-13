@@ -1,12 +1,13 @@
 package com.revolut.backend.task.service.impl;
 
 import com.google.inject.Inject;
-import com.revolut.backend.task.dao.AccountDao;
+import com.revolut.backend.task.dao.impl.AccountDao;
 import com.revolut.backend.task.entity.Account;
 import com.revolut.backend.task.entity.AccountBalance;
 import com.revolut.backend.task.service.CrudService;
 
 import java.util.List;
+import java.util.UUID;
 
 public class AccountService implements CrudService<Account> {
 
@@ -17,11 +18,11 @@ public class AccountService implements CrudService<Account> {
     private AccountGeneratorService accountGeneratorService;
 
     @Override
-    public Account findBy(String id) {
+    public Account findBy(UUID id) {
         return accountDao.findBy(id);
     }
 
-    public List findBy(List ids) {
+    public List<Account> findBy(List ids) {
         return accountDao.findBy(ids);
     }
 
@@ -40,7 +41,7 @@ public class AccountService implements CrudService<Account> {
     }
 
     @Override
-    public void delete(String id) {
+    public void delete(UUID id) {
         accountDao.delete(id);
     }
 }

@@ -1,10 +1,26 @@
 package com.revolut.backend.task.entity;
 
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Parameter;
+
 import javax.persistence.*;
+import java.util.UUID;
 
 @Entity
 @Table(name = "ACCOUNT")
-public class Account extends AbstractIdentifiableObject {
+public class Account {
+
+    @Id
+    @GenericGenerator(
+            name = "custom-uuid",
+            strategy = "com.revolut.backend.task.dao.util.AccountCustomUuidGenerator",
+            parameters = {
+                    @Parameter(name = "accountNumber", value = "num")
+            }
+    )
+    @GeneratedValue(generator = "custom-uuid", strategy = GenerationType.SEQUENCE)
+    @Column(name = "ID")
+    private UUID id;
 
     @Column(name = "CURRENCY_ID")
     private Long currencyId;
@@ -18,6 +34,14 @@ public class Account extends AbstractIdentifiableObject {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "ACCOUNT_BALANCE_ID")
     private AccountBalance accountBalance;
+
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
 
     public String getMetadata() {
         return metadata;
@@ -55,6 +79,7 @@ public class Account extends AbstractIdentifiableObject {
     @Override
     public String toString() {
         return "Account{" +
+                "id=" + id +
                 ", currencyId=" + currencyId +
                 ", num='" + num + '\'' +
                 ", metadata='" + metadata + '\'' +

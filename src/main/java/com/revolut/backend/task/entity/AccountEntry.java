@@ -7,6 +7,15 @@ import java.math.BigDecimal;
 @Table(name = "ACCOUNT_ENTRY")
 public class AccountEntry extends AbstractIdentifiableObject {
 
+    public AccountEntry() {
+    }
+
+    public AccountEntry(Account debitAccount, Account creditAccount, BigDecimal amount) {
+        this.debitAccount = debitAccount;
+        this.creditAccount = creditAccount;
+        this.amount = amount;
+    }
+
     @OneToOne(fetch = FetchType.LAZY)
     private Account debitAccount;
 
@@ -15,9 +24,6 @@ public class AccountEntry extends AbstractIdentifiableObject {
 
     @Column(name = "AMOUNT", nullable = false)
     private BigDecimal amount;
-
-    @Column(name = "DESCRIPTION")
-    private String description;
 
     public Account getDebitAccount() {
         return debitAccount;
@@ -43,13 +49,6 @@ public class AccountEntry extends AbstractIdentifiableObject {
         this.amount = amount;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
 
     @Override
     public String toString() {
@@ -57,7 +56,6 @@ public class AccountEntry extends AbstractIdentifiableObject {
                 ", debitAccount=" + debitAccount +
                 ", creditAccount=" + creditAccount +
                 ", amount=" + amount +
-                ", descriptiont='" + description + '\'' +
                 '}';
     }
 }

@@ -1,12 +1,12 @@
-package com.revolut.backend.task.service;
+package com.revolut.backend.task.dao;
 
 import java.util.List;
 import java.util.UUID;
 
-public interface CrudService<T> {
+public interface EntityDao<T> {
     T findBy(UUID id);
     List<T> findBy(List ids);
-    T create(T entity);
-    void update(T entity);
+    T save(T entity);
     void delete(UUID id);
+    void update(T entity);
 }
