@@ -1,18 +1,10 @@
 package com.revolut.backend.task.entity;
 
-import org.hibernate.annotations.GenericGenerator;
-
 import javax.persistence.*;
 
 @Entity
 @Table(name = "ACCOUNT")
-public class Account {
-
-    @Id
-    @GeneratedValue(generator = "system-uuid")
-    @GenericGenerator(name = "system-uuid", strategy = "uuid")
-    @Column(name = "ID")
-    private String id;
+public class Account extends AbstractIdentifiableObject {
 
     @Column(name = "CURRENCY_ID")
     private Long currencyId;
@@ -26,14 +18,6 @@ public class Account {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "ACCOUNT_BALANCE_ID")
     private AccountBalance accountBalance;
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public String getMetadata() {
         return metadata;
@@ -71,7 +55,6 @@ public class Account {
     @Override
     public String toString() {
         return "Account{" +
-                "id='" + id + '\'' +
                 ", currencyId=" + currencyId +
                 ", num='" + num + '\'' +
                 ", metadata='" + metadata + '\'' +

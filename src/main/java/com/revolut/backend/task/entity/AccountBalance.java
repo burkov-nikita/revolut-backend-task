@@ -1,20 +1,16 @@
 package com.revolut.backend.task.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 import java.math.BigDecimal;
 
 @Entity
 @Table(name = "ACCOUT_BALANCE")
-public class AccountBalance {
-
-    @Id
-    @GeneratedValue(generator = "system-uuid")
-    @GenericGenerator(name = "system-uuid", strategy = "uuid")
-    @Column(name = "ID")
-    private String id;
+public class AccountBalance extends AbstractIdentifiableObject {
 
     @OneToOne(mappedBy = "accountBalance")
     @JsonIgnore
@@ -22,14 +18,6 @@ public class AccountBalance {
 
     @Column(name = "SALDO")
     private BigDecimal saldo = new BigDecimal(0);
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public Account getAccount() {
         return account;
@@ -45,5 +33,13 @@ public class AccountBalance {
 
     public void setSaldo(BigDecimal saldo) {
         this.saldo = saldo;
+    }
+
+    @Override
+    public String toString() {
+        return "AccountBalance{" +
+                "account=" + account +
+                ", saldo=" + saldo +
+                '}';
     }
 }
