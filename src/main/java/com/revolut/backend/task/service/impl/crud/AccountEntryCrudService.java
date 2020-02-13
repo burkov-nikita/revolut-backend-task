@@ -1,16 +1,15 @@
-package com.revolut.backend.task.service.impl;
+package com.revolut.backend.task.service.impl.crud;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.revolut.backend.task.dao.impl.AccountEntryDao;
 import com.revolut.backend.task.entity.AccountEntry;
-import com.revolut.backend.task.service.CrudService;
 
 import java.util.List;
 import java.util.UUID;
 
 @Singleton
-public class AccountEntryService implements CrudService<AccountEntry> {
+public class AccountEntryCrudService implements CrudService<AccountEntry> {
 
     @Inject
     private AccountEntryDao accountEntryDao;

@@ -1,15 +1,15 @@
-package com.revolut.backend.task.service.impl;
+package com.revolut.backend.task.service.impl.crud;
 
 import com.google.inject.Inject;
+import com.google.inject.persist.Transactional;
 import com.revolut.backend.task.dao.impl.AccountDao;
 import com.revolut.backend.task.entity.Account;
-import com.revolut.backend.task.entity.AccountBalance;
-import com.revolut.backend.task.service.CrudService;
+import com.revolut.backend.task.service.impl.AccountGeneratorService;
 
 import java.util.List;
 import java.util.UUID;
 
-public class AccountService implements CrudService<Account> {
+public class AccountCrudService implements CrudService<Account> {
 
     @Inject
     private AccountDao accountDao;
@@ -18,6 +18,7 @@ public class AccountService implements CrudService<Account> {
     private AccountGeneratorService accountGeneratorService;
 
     @Override
+    @Transactional
     public Account findBy(UUID id) {
         return accountDao.findBy(id);
     }
@@ -31,7 +32,6 @@ public class AccountService implements CrudService<Account> {
         if (entity.getNum() == null || entity.getNum().equals("")) {
             entity.setNum(accountGeneratorService.generateAccountNumber(entity));
         }
-        entity.setAccountBalance(new AccountBalance());
         return accountDao.save(entity);
     }
 

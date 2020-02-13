@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import static javax.persistence.LockModeType.PESSIMISTIC_WRITE;
+
 @Singleton
 public class AccountDao implements EntityDao<Account> {
 
@@ -25,9 +27,10 @@ public class AccountDao implements EntityDao<Account> {
 
     @Override
     public List<Account> findBy(List ids) {
-        return (List<Account>)entityManager.get()
+        return (List<Account>) entityManager.get()
                 .createQuery("FROM Account a WHERE a.id IN :ids")
                 .setParameter("ids", ids)
+                .setLockMode(PESSIMISTIC_WRITE)
                 .getResultList();
     }
 
@@ -48,10 +51,6 @@ public class AccountDao implements EntityDao<Account> {
     @Transactional
     public void update(Account account) {
         Optional.ofNullable(entityManager.get().find(Account.class, account.getId()))
-                .ifPresent(entity -> {
-                            account.setId(entity.getId());
-                            entityManager.get().merge(account);
-                        }
-                );
+                .ifPresent(entity -> account.setId(entity.getId()));
     }
 }

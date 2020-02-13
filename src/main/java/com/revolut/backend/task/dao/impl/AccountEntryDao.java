@@ -22,7 +22,7 @@ public class AccountEntryDao implements EntityDao<AccountEntry> {
     @Override
     public List<AccountEntry> findBy(List ids) {
         return (List<AccountEntry>) entityManager.get()
-                .createQuery("FROM AccountEntry ae WHERE ae.debitAccount IN :ids OR ae.creditAccount IN :ids")
+                .createQuery("FROM AccountEntry ae WHERE ae.debitAccount.id IN :ids OR ae.creditAccount.id IN :ids")
                 .setParameter("ids", ids)
                 .getResultList();
     }
