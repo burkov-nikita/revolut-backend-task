@@ -1,11 +1,14 @@
 package com.revolut.backend.task.entity;
 
+import org.hibernate.annotations.GenericGenerator;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.UUID;
 
 @Entity
 @Table(name = "ACCOUNT_ENTRY")
-public class AccountEntry extends AbstractIdentifiableObject {
+public class AccountEntry {
 
     public AccountEntry() {
     }
@@ -16,10 +19,26 @@ public class AccountEntry extends AbstractIdentifiableObject {
         this.amount = amount;
     }
 
+    @Id
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+    @Column(name = "ID")
+    private UUID id;
+
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
     @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "debitAccount_id")
     private Account debitAccount;
 
     @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "creditAccount_id")
     private Account creditAccount;
 
     @Column(name = "AMOUNT", nullable = false)
@@ -49,10 +68,10 @@ public class AccountEntry extends AbstractIdentifiableObject {
         this.amount = amount;
     }
 
-
     @Override
     public String toString() {
         return "AccountEntry{" +
+                "id=" + id +
                 ", debitAccount=" + debitAccount +
                 ", creditAccount=" + creditAccount +
                 ", amount=" + amount +

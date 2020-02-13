@@ -4,7 +4,11 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.UUID;
+import java.util.function.BiFunction;
+
+import static java.util.Arrays.asList;
 
 @Entity
 @Table(name = "ACCOUNT")
@@ -31,9 +35,8 @@ public class Account {
     @Column(name = "METADATA")
     private String metadata;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "ACCOUNT_BALANCE_ID")
-    private AccountBalance accountBalance;
+    @Column(name = "SALDO")
+    private BigDecimal saldo = new BigDecimal(0);
 
     public UUID getId() {
         return id;
@@ -67,13 +70,23 @@ public class Account {
         this.num = num;
     }
 
-    public AccountBalance getAccountBalance() {
-        return accountBalance;
+    public BigDecimal getSaldo() {
+        return saldo;
     }
 
-    public void setAccountBalance(AccountBalance accountBalance) {
-        this.accountBalance = accountBalance;
-        accountBalance.setAccount(this);
+    public void setSaldo(BigDecimal saldo) {
+        this.saldo = saldo;
+    }
+
+    public Account changeSaldo(BigDecimal amount, BiFunction<Account, BigDecimal, Account> function) {
+        function.apply(this, amount);
+        return this;
+    }
+
+    public boolean isSolvent(BigDecimal amount) {
+        return asList(0, 1).contains(this.getSaldo()
+                .subtract(amount)
+                .compareTo(new BigDecimal(0)));
     }
 
     @Override
@@ -83,7 +96,7 @@ public class Account {
                 ", currencyId=" + currencyId +
                 ", num='" + num + '\'' +
                 ", metadata='" + metadata + '\'' +
-                ", accountBalance=" + accountBalance +
+                ", saldo=" + saldo +
                 '}';
     }
 }
