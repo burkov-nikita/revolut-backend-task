@@ -11,7 +11,8 @@ ext.lib = [
         hibernate_core          : "org.hibernate:hibernate-core:${hibernateVersion}",
         hibernate_entity_manager: "org.hibernate:hibernate-entitymanager:${hibernateVersion}",
         guice_persist           : "com.google.inject.extensions:guice-persist:${guiceVersion}",
-        commons_lang            : 'org.apache.commons:commons-lang3:3.8'
+        commons_lang            : 'org.apache.commons:commons-lang3:3.8',
+        junit                   : 'junit:junit:4.12'
 ]
 
 ext.lib_pack = [
@@ -32,6 +33,9 @@ ext.lib_pack = [
                 ext.lib.hibernate_core,
                 ext.lib.hibernate_entity_manager,
                 ext.lib.guice_persist
+        ],
+        test       : [
+                ext.lib.junit
         ],
         common     : [
                 ext.lib.commons_lang
