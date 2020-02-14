@@ -13,11 +13,15 @@ import java.util.UUID;
 @Singleton
 public class AccountCrudService implements CrudService<Account> {
 
-    @Inject
     private AccountDao accountDao;
 
-    @Inject
     private AccountGeneratorService accountGeneratorService;
+
+    @Inject
+    public AccountCrudService(AccountDao accountDao, AccountGeneratorService accountGeneratorService) {
+        this.accountDao = accountDao;
+        this.accountGeneratorService = accountGeneratorService;
+    }
 
     @Override
     @Transactional
@@ -31,7 +35,7 @@ public class AccountCrudService implements CrudService<Account> {
 
     @Override
     public Account create(Account entity) {
-        if (entity.getNum() == null || entity.getNum().equals("")) {
+        if (entity != null && (entity.getNum() == null || entity.getNum().equals(""))) {
             entity.setNum(accountGeneratorService.generateAccountNumber(entity));
         }
         return accountDao.save(entity);

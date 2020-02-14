@@ -37,7 +37,7 @@ public class Account {
     @Column(name = "CURRENCY_ID")
     private Long currencyId;
 
-    @Column(name = "NUM", unique = true)
+    @Column(name = "NUM", unique = true, nullable = false)
     private String num;
 
     @Column(name = "METADATA")
