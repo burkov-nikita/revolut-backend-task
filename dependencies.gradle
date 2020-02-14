@@ -12,7 +12,9 @@ ext.lib = [
         hibernate_entity_manager: "org.hibernate:hibernate-entitymanager:${hibernateVersion}",
         guice_persist           : "com.google.inject.extensions:guice-persist:${guiceVersion}",
         commons_lang            : 'org.apache.commons:commons-lang3:3.8',
-        junit                   : 'junit:junit:4.12'
+        junit                   : 'junit:junit:4.12',
+        jersey_client           : "org.glassfish.jersey.core:jersey-client:${jerseyVersion}",
+        jersey_test             : "org.glassfish.jersey.test-framework.providers:jersey-test-framework-provider-jetty:${jerseyVersion}"
 ]
 
 ext.lib_pack = [
@@ -35,7 +37,9 @@ ext.lib_pack = [
                 ext.lib.guice_persist
         ],
         test       : [
-                ext.lib.junit
+                ext.lib.junit,
+                ext.lib.jersey_client,
+                ext.lib.jersey_test
         ],
         common     : [
                 ext.lib.commons_lang
