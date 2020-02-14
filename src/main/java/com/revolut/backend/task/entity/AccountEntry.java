@@ -1,5 +1,6 @@
 package com.revolut.backend.task.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -33,12 +34,14 @@ public class AccountEntry {
         this.id = id;
     }
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "debitAccount_id")
+    @OneToOne
+    @JoinColumn(name = "debit_account_num", referencedColumnName = "id")
+    @JsonIgnoreProperties({"saldo"})
     private Account debitAccount;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "creditAccount_id")
+    @OneToOne
+    @JoinColumn(name = "credit_account_num", referencedColumnName = "id")
+    @JsonIgnoreProperties({"saldo"})
     private Account creditAccount;
 
     @Column(name = "AMOUNT", nullable = false)
