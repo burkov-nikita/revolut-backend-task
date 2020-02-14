@@ -1,4 +1,4 @@
-package com.revolut.backend.task.service.impl.util;
+package com.revolut.backend.task.util;
 
 import com.revolut.backend.task.entity.Account;
 

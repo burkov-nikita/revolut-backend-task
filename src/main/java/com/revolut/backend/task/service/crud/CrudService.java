@@ -1,4 +1,4 @@
-package com.revolut.backend.task.service.impl.crud;
+package com.revolut.backend.task.service.crud;
 
 import java.util.List;
 import java.util.UUID;

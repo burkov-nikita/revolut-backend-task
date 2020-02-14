@@ -1,14 +1,16 @@
-package com.revolut.backend.task.service.impl.crud;
+package com.revolut.backend.task.service.crud;
 
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import com.google.inject.persist.Transactional;
+import com.revolut.backend.task.service.AccountGeneratorService;
 import com.revolut.backend.task.dao.impl.AccountDao;
 import com.revolut.backend.task.entity.Account;
-import com.revolut.backend.task.service.impl.AccountGeneratorService;
 
 import java.util.List;
 import java.util.UUID;
 
+@Singleton
 public class AccountCrudService implements CrudService<Account> {
 
     @Inject

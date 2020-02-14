@@ -3,8 +3,8 @@ package com.revolut.backend.task.api.controller;
 import com.revolut.backend.task.api.annotation.AccountNumberToUUID;
 import com.revolut.backend.task.entity.Account;
 import com.revolut.backend.task.entity.AccountEntry;
-import com.revolut.backend.task.service.impl.crud.AccountCrudService;
-import com.revolut.backend.task.service.impl.crud.AccountEntryCrudService;
+import com.revolut.backend.task.service.crud.AccountCrudService;
+import com.revolut.backend.task.service.crud.AccountEntryCrudService;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;

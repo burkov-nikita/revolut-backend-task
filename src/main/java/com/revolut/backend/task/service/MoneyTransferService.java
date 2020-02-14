@@ -1,13 +1,13 @@
-package com.revolut.backend.task.service.impl;
+package com.revolut.backend.task.service;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.google.inject.persist.Transactional;
 import com.revolut.backend.task.entity.Account;
 import com.revolut.backend.task.entity.AccountEntry;
-import com.revolut.backend.task.service.impl.crud.AccountCrudService;
-import com.revolut.backend.task.service.impl.crud.AccountEntryCrudService;
-import com.revolut.backend.task.service.impl.util.MoneyDirection;
+import com.revolut.backend.task.service.crud.AccountCrudService;
+import com.revolut.backend.task.service.crud.AccountEntryCrudService;
+import com.revolut.backend.task.util.MoneyDirection;
 
 import java.math.BigDecimal;
 import java.util.List;

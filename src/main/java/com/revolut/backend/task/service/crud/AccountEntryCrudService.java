@@ -1,4 +1,4 @@
-package com.revolut.backend.task.service.impl.crud;
+package com.revolut.backend.task.service.crud;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
