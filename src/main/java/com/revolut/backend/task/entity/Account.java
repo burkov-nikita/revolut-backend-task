@@ -14,6 +14,14 @@ import static java.util.Arrays.asList;
 @Table(name = "ACCOUNT")
 public class Account {
 
+    public Account() {
+    }
+
+    public Account(Long currencyId, String metadata) {
+        this.currencyId = currencyId;
+        this.metadata = metadata;
+    }
+
     @Id
     @GenericGenerator(
             name = "custom-uuid",

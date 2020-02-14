@@ -1,6 +1,7 @@
-package com.revolut.backend.task.service.impl.util;
+package com.revolut.backend.task.unit;
 
 import com.revolut.backend.task.entity.Account;
+import com.revolut.backend.task.util.MoneyDirection;
 import org.junit.Test;
 
 import java.math.BigDecimal;

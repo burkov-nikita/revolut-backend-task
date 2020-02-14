@@ -13,8 +13,13 @@ ext.lib = [
         guice_persist           : "com.google.inject.extensions:guice-persist:${guiceVersion}",
         commons_lang            : 'org.apache.commons:commons-lang3:3.8',
         junit                   : 'junit:junit:4.12',
+        junit_concurrent        : "com.vmlens:concurrent-junit:1.0.2", //REMOVE?
         jersey_client           : "org.glassfish.jersey.core:jersey-client:${jerseyVersion}",
-        jersey_test             : "org.glassfish.jersey.test-framework.providers:jersey-test-framework-provider-jetty:${jerseyVersion}"
+        guice_junit             : 'net.lamberto.junit:guice-junit-runner:1.0.2',
+        jersey_test_provider    : "org.glassfish.jersey.test-framework.providers:jersey-test-framework-provider-jetty:${jerseyVersion}",
+        jersey_test_core        : "org.glassfish.jersey.test-framework:jersey-test-framework-core:${jerseyVersion}",
+        mockito                 : "org.mockito:mockito-core:3.2.4",
+        lombok                  : 'org.projectlombok:lombok:1.18.10'
 ]
 
 ext.lib_pack = [
@@ -38,10 +43,15 @@ ext.lib_pack = [
         ],
         test       : [
                 ext.lib.junit,
+                ext.lib.junit_concurrent,
                 ext.lib.jersey_client,
-                ext.lib.jersey_test
+                ext.lib.jersey_test_provider,
+                ext.lib.jersey_test_core,
+                ext.lib.guice_junit,
+                ext.lib.mockito
         ],
         common     : [
-                ext.lib.commons_lang
+                ext.lib.commons_lang,
+                ext.lib.lombok
         ]
 ]
