@@ -1,4 +1,4 @@
-package com.revolut.backend.task.integration;
+package com.revolut.backend.task.functional;
 
 import com.revolut.backend.task.ApplicationConfig;
 import com.revolut.backend.task.entity.Account;
@@ -6,7 +6,6 @@ import org.glassfish.jersey.test.DeploymentContext;
 import org.glassfish.jersey.test.JerseyTest;
 import org.junit.Test;
 
-import javax.ws.rs.client.Entity;
 import java.math.BigDecimal;
 import java.util.stream.IntStream;
 

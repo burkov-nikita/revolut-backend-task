@@ -6,20 +6,20 @@ ext.lib = [
         jersey_server           : "org.glassfish.jersey.core:jersey-server:${jerseyVersion}",
         jersey_container        : "org.glassfish.jersey.containers:jersey-container-servlet:${jerseyVersion}",
         jersey_jackson          : "org.glassfish.jersey.media:jersey-media-json-jackson:${jerseyVersion}",
-        hibernate_jpa           : "org.hibernate.javax.persistence:hibernate-jpa-2.1-api:${hibernateJpa}",
+        hibernate_jpa           : "org.hibernate.javax.persistence:hibernate-jpa-2.1-api:${hibernateJpaVersion}",
         h2                      : "com.h2database:h2:${h2Version}",
         hibernate_core          : "org.hibernate:hibernate-core:${hibernateVersion}",
         hibernate_entity_manager: "org.hibernate:hibernate-entitymanager:${hibernateVersion}",
         guice_persist           : "com.google.inject.extensions:guice-persist:${guiceVersion}",
-        commons_lang            : 'org.apache.commons:commons-lang3:3.8',
-        junit                   : 'junit:junit:4.12',
+        commons_lang            : "org.apache.commons:commons-lang3:${commonsLangVersion}",
+        junit                   : "junit:junit:${junitVersion}",
         junit_concurrent        : "com.vmlens:concurrent-junit:1.0.2", //REMOVE?
         jersey_client           : "org.glassfish.jersey.core:jersey-client:${jerseyVersion}",
-        guice_junit             : 'net.lamberto.junit:guice-junit-runner:1.0.2',
+        guice_junit             : "net.lamberto.junit:guice-junit-runner:${guiceJunitRunnerVersion}",
         jersey_test_provider    : "org.glassfish.jersey.test-framework.providers:jersey-test-framework-provider-jetty:${jerseyVersion}",
         jersey_test_core        : "org.glassfish.jersey.test-framework:jersey-test-framework-core:${jerseyVersion}",
-        mockito                 : "org.mockito:mockito-core:3.2.4",
-        lombok                  : 'org.projectlombok:lombok:1.18.10'
+        mockito                 : "org.mockito:mockito-core:${mockitoVersion}",
+        lombok                  : "org.projectlombok:lombok:${lombokVersion}"
 ]
 
 ext.lib_pack = [

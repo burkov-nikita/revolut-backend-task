@@ -83,8 +83,6 @@ public class AccountControllerFuncTest extends JerseyTest {
         this.createAccountTestOk();
         Account account = this.account;
 
-        account.setMetadata("TESTSTE");
-
         Response response = target("/account/create")
                 .request()
                 .post(entity(account, APPLICATION_JSON));
