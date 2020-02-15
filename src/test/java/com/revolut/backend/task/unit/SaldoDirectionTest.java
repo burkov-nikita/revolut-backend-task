@@ -1,7 +1,7 @@
 package com.revolut.backend.task.unit;
 
 import com.revolut.backend.task.entity.Account;
-import com.revolut.backend.task.util.MoneyDirection;
+import com.revolut.backend.task.util.SaldoDirection;
 import org.junit.Test;
 
 import java.math.BigDecimal;
@@ -9,14 +9,14 @@ import java.util.stream.IntStream;
 
 import static org.junit.Assert.assertEquals;
 
-public class MoneyDirectionTest {
+public class SaldoDirectionTest {
 
     @Test
     public void increaseSaldoTest() {
         Account account = new Account();
         BigDecimal amount = new BigDecimal(1000);
         IntStream.range(0, 1000).forEach(i ->
-                account.changeSaldo(amount, MoneyDirection.INCREASE_SALDO)
+                account.changeSaldo(amount, SaldoDirection.INCREASE_SALDO)
         );
         assertEquals(new BigDecimal(1000000), account.getSaldo());
     }
@@ -26,7 +26,7 @@ public class MoneyDirectionTest {
         Account account = new Account();
         BigDecimal amount = new BigDecimal(1000);
         IntStream.range(0, 1000).forEach(i ->
-                account.changeSaldo(amount, MoneyDirection.DESCREASE_SALDO)
+                account.changeSaldo(amount, SaldoDirection.DESCREASE_SALDO)
         );
         assertEquals(new BigDecimal(-1000000), account.getSaldo());
     }
@@ -36,8 +36,8 @@ public class MoneyDirectionTest {
         Account account = new Account();
         BigDecimal amount = new BigDecimal(1000);
         IntStream.range(0, 1000).forEach(i -> {
-            account.changeSaldo(amount, MoneyDirection.INCREASE_SALDO);
-            account.changeSaldo(amount, MoneyDirection.DESCREASE_SALDO);
+            account.changeSaldo(amount, SaldoDirection.INCREASE_SALDO);
+            account.changeSaldo(amount, SaldoDirection.DESCREASE_SALDO);
         });
         assertEquals(new BigDecimal(0), account.getSaldo());
     }

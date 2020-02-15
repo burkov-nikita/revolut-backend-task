@@ -5,7 +5,7 @@ import com.revolut.backend.task.entity.Account;
 import java.math.BigDecimal;
 import java.util.function.BiFunction;
 
-public class MoneyDirection {
+public class SaldoDirection {
     public static BiFunction<Account, BigDecimal, Account> INCREASE_SALDO = (account, amount) -> {
         account.setSaldo(account.getSaldo().add(amount));
         return account;

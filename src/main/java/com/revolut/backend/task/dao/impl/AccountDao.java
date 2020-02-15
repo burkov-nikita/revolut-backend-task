@@ -6,6 +6,7 @@ import com.google.inject.Singleton;
 import com.google.inject.persist.Transactional;
 import com.revolut.backend.task.dao.EntityDao;
 import com.revolut.backend.task.entity.Account;
+import com.revolut.backend.task.exception.NotAllowedIdException;
 
 import javax.persistence.EntityManager;
 import java.util.List;
@@ -37,8 +38,8 @@ public class AccountDao implements EntityDao<Account> {
     @Override
     @Transactional
     public Account save(Account account) {
-        if (account.getId() != null) {
-            throw new RuntimeException("You are not allowed to set ID");
+        if (account != null && account.getId() != null) {
+            throw new NotAllowedIdException();
         } else {
             return entityManager.get().merge(account);
         }

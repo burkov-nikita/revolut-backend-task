@@ -4,6 +4,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revolut.backend.task.ApplicationConfig;
 import com.revolut.backend.task.entity.Account;
+import com.revolut.backend.task.exception.NotAllowedIdException;
+import com.revolut.backend.task.exception.MissedCurrencyIdException;
 import org.glassfish.jersey.test.DeploymentContext;
 import org.glassfish.jersey.test.JerseyTest;
 import org.junit.Test;
@@ -72,7 +74,8 @@ public class AccountControllerFuncTest extends JerseyTest {
                 .request()
                 .post(entity(rawAccount, APPLICATION_JSON));
 
-        assertEquals(INTERNAL_SERVER_ERROR_500, response.getStatus());
+        assertEquals(BAD_REQUEST_400, response.getStatus());
+        assertEquals(MissedCurrencyIdException.MESSAGE, response.readEntity(String.class));
     }
 
     @Test
@@ -86,7 +89,8 @@ public class AccountControllerFuncTest extends JerseyTest {
                 .request()
                 .post(entity(account, APPLICATION_JSON));
 
-        assertEquals(INTERNAL_SERVER_ERROR_500, response.getStatus());
+        assertEquals(BAD_REQUEST_400, response.getStatus());
+        assertEquals(NotAllowedIdException.MESSAGE, response.readEntity(String.class));
     }
 
     @Test

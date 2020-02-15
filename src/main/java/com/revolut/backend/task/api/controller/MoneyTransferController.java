@@ -9,7 +9,7 @@ import javax.ws.rs.*;
 import java.math.BigDecimal;
 import java.util.UUID;
 
-import static com.revolut.backend.task.util.MoneyDirection.INCREASE_SALDO;
+import static com.revolut.backend.task.util.SaldoDirection.INCREASE_SALDO;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 
 @Path("/transfer")

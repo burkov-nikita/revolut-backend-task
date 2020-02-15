@@ -7,7 +7,7 @@ import com.revolut.backend.task.entity.Account;
 import com.revolut.backend.task.entity.AccountEntry;
 import com.revolut.backend.task.service.crud.AccountCrudService;
 import com.revolut.backend.task.service.crud.AccountEntryCrudService;
-import com.revolut.backend.task.util.MoneyDirection;
+import com.revolut.backend.task.util.SaldoDirection;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -38,15 +38,15 @@ public class MoneyTransferService {
     public AccountEntry transferMoney(UUID creditAccount, UUID debitAccount, BigDecimal amount) {
         List<Account> accounts = accountCrudService.findBy(asList(debitAccount, creditAccount));
 
+        //TODO: ALso Check if different currency
         if (accounts.size() == 2) {
             Map<UUID, Account> accountsMap = accounts.stream().collect(toMap(Account::getId, account -> account));
             boolean solvent = accountsMap.get(creditAccount).isSolvent(amount);
             if (solvent) {
-                accountsMap.get(creditAccount).changeSaldo(amount, MoneyDirection.DESCREASE_SALDO);
-                accountsMap.get(debitAccount).changeSaldo(amount, MoneyDirection.INCREASE_SALDO);
+                accountsMap.get(creditAccount).changeSaldo(amount, SaldoDirection.DESCREASE_SALDO);
+                accountsMap.get(debitAccount).changeSaldo(amount, SaldoDirection.INCREASE_SALDO);
                 return accountEntryCrudService.create(new AccountEntry(accountsMap.get(creditAccount), accountsMap.get(debitAccount), amount));
             }
-
         }
         return new AccountEntry();
     }
