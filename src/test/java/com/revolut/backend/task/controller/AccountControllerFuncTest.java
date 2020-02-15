@@ -6,6 +6,7 @@ import org.glassfish.jersey.test.DeploymentContext;
 import org.glassfish.jersey.test.JerseyTest;
 import org.junit.Test;
 
+import javax.ws.rs.core.Response;
 import java.math.BigDecimal;
 
 import static java.lang.Long.valueOf;
@@ -30,10 +31,13 @@ public class AccountControllerFuncTest extends JerseyTest {
     public void createAccountTestOk() {
         Account rawAccount = new Account(643L, METADATA);
 
-        account = target("/account/create")
+        Response response = target("/account/create")
                 .request()
-                .post(entity(rawAccount, APPLICATION_JSON))
-                .readEntity(Account.class);
+                .post(entity(rawAccount, APPLICATION_JSON));
+
+        assertEquals(200, response.getStatus());
+
+        account = response.readEntity(Account.class);
 
         assertEquals(valueOf(643L), account.getCurrencyId());
         assertEquals(METADATA, account.getMetadata());
@@ -46,15 +50,60 @@ public class AccountControllerFuncTest extends JerseyTest {
     public void getAccountTestOk() {
         this.createAccountTestOk();
 
-        Account foundAccount = target("/account/" + account.getId())
+        Response response = target("/account/" + account.getId())
                 .request()
-                .get()
-                .readEntity(Account.class);
+                .get();
+
+        assertEquals(200, response.getStatus());
+
+        Account foundAccount = response.readEntity(Account.class);
 
         assertEquals(valueOf(643L), foundAccount.getCurrencyId());
         assertEquals(METADATA, foundAccount.getMetadata());
         assertEquals(new BigDecimal("0.00"), foundAccount.getSaldo());
         assertTrue(isNumeric(foundAccount.getNum()));
         assertEquals(foundAccount.getId().toString(), nameUUIDFromBytes(foundAccount.getNum().getBytes()).toString());
+    }
+
+    @Test
+    public void removeAccountTestOk() {
+        this.getAccountTestOk();
+
+        Response deleteResponse = target("/account/" + account.getId())
+                .request()
+                .delete();
+
+        assertEquals(204, deleteResponse.getStatus());
+
+        Response getResponse = target("/account/" + account.getId())
+                .request()
+                .get();
+
+        assertEquals(204, getResponse.getStatus());
+    }
+
+    @Test
+    public void updateAccountTestOk() {
+        this.createAccountTestOk();
+        Account account = this.account;
+        account.setMetadata("Test_Test");
+
+        Response updateResponse = target("account/update/")
+                .request()
+                .post(entity(account, APPLICATION_JSON));
+
+        assertEquals(204, updateResponse.getStatus());
+
+        Response getResponse = target("/account/" + account.getId())
+                .request()
+                .get();
+
+        assertEquals(200, getResponse.getStatus());
+
+        assertEquals(valueOf(643L), account.getCurrencyId());
+        assertEquals("Test_Test", account.getMetadata());
+        assertEquals(new BigDecimal("0"), account.getSaldo());
+        assertTrue(isNumeric(account.getNum()));
+        assertEquals(account.getId().toString(), nameUUIDFromBytes(account.getNum().getBytes()).toString());
     }
 }

@@ -34,10 +34,10 @@ public class Account {
     @Column(name = "ID")
     private UUID id;
 
-    @Column(name = "CURRENCY_ID")
+    @Column(name = "CURRENCY_ID", updatable = false, nullable = false)
     private Long currencyId;
 
-    @Column(name = "NUM", unique = true, nullable = false)
+    @Column(name = "NUM", unique = true, nullable = false, updatable = false)
     private String num;
 
     @Column(name = "METADATA")
