@@ -1,6 +1,10 @@
 package com.revolut.backend.task.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -8,11 +12,12 @@ import java.math.BigDecimal;
 import java.util.UUID;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@ToString
 @Table(name = "ACCOUNT_ENTRY")
 public class AccountEntry {
-
-    public AccountEntry() {
-    }
 
     public AccountEntry(Account debitAccount, Account creditAccount, BigDecimal amount) {
         this.debitAccount = debitAccount;
@@ -46,38 +51,4 @@ public class AccountEntry {
 
     @Column(name = "AMOUNT", nullable = false)
     private BigDecimal amount;
-
-    public Account getDebitAccount() {
-        return debitAccount;
-    }
-
-    public void setDebitAccount(Account debitAccount) {
-        this.debitAccount = debitAccount;
-    }
-
-    public Account getCreditAccount() {
-        return creditAccount;
-    }
-
-    public void setCreditAccount(Account creditAccount) {
-        this.creditAccount = creditAccount;
-    }
-
-    public BigDecimal getAmount() {
-        return amount;
-    }
-
-    public void setAmount(BigDecimal amount) {
-        this.amount = amount;
-    }
-
-    @Override
-    public String toString() {
-        return "AccountEntry{" +
-                "id=" + id +
-                ", debitAccount=" + debitAccount +
-                ", creditAccount=" + creditAccount +
-                ", amount=" + amount +
-                '}';
-    }
 }
