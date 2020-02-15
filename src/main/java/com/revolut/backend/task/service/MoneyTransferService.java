@@ -32,7 +32,7 @@ public class MoneyTransferService {
     private CheckCurrencies byCurrencies;
 
     @Inject
-    private CheckExistance byExistance;
+    private CheckExistance byExistence;
 
     @Inject
     private CheckSolvency bySolvency;
@@ -53,7 +53,7 @@ public class MoneyTransferService {
     public List<AccountEntry> transferMoney(UUID creditAccount, UUID debitAccount, BigDecimal amount) {
         List<AccountEntry> accountEntries = of(new Action.Context(new AccountTransferDTO(creditAccount, debitAccount, amount)))
                 .map(fetchAccounts)
-                .filter(byExistance)
+                .filter(byExistence)
                 .filter(byCurrencies)
                 .filter(bySolvency)
                 .peek(changeSaldo)
