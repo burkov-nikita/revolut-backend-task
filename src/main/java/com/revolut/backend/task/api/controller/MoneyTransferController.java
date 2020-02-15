@@ -7,6 +7,7 @@ import com.revolut.backend.task.service.MoneyTransferService;
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.UUID;
 
 import static com.revolut.backend.task.util.SaldoDirection.INCREASE_SALDO;
@@ -22,9 +23,9 @@ public class MoneyTransferController {
 
     @POST
     @Path("from/{from}/to/{to}")
-    public AccountEntry transferMoneyBetweenAccounts(@PathParam("from") @AccountNumberToUUID UUID from,
-                                                     @PathParam("to") @AccountNumberToUUID UUID to,
-                                                     @QueryParam("amount") BigDecimal amount) {
+    public List<AccountEntry> transferMoneyBetweenAccounts(@PathParam("from") @AccountNumberToUUID UUID from,
+                                                           @PathParam("to") @AccountNumberToUUID UUID to,
+                                                           @QueryParam("amount") BigDecimal amount) {
         return moneyTransferService.transferMoney(from, to, amount);
     }
 

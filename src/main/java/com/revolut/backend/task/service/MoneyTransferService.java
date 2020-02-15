@@ -1,23 +1,23 @@
 package com.revolut.backend.task.service;
 
+import com.google.common.collect.ImmutableList;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.google.inject.persist.Transactional;
+import com.revolut.backend.task.dto.AccountTransferDTO;
 import com.revolut.backend.task.entity.Account;
 import com.revolut.backend.task.entity.AccountEntry;
+import com.revolut.backend.task.service.action.*;
 import com.revolut.backend.task.service.crud.AccountCrudService;
-import com.revolut.backend.task.service.crud.AccountEntryCrudService;
-import com.revolut.backend.task.util.SaldoDirection;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 import java.util.function.BiFunction;
+import java.util.stream.Collectors;
 
-import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
-import static java.util.stream.Collectors.toMap;
+import static java.util.stream.Stream.of;
 
 @Singleton
 public class MoneyTransferService {
@@ -26,7 +26,22 @@ public class MoneyTransferService {
     private AccountCrudService accountCrudService;
 
     @Inject
-    private AccountEntryCrudService accountEntryCrudService;
+    private AccountFetcher fetchAccounts;
+
+    @Inject
+    private CheckCurrencies byCurrencies;
+
+    @Inject
+    private CheckExistance byExistance;
+
+    @Inject
+    private CheckSolvency bySolvency;
+
+    @Inject
+    private ChangeSaldo changeSaldo;
+
+    @Inject
+    private CreateAccountEntry createAccountEntry;
 
     @Transactional
     public void transferMoney(UUID debitAccount, BigDecimal amount, BiFunction<Account, BigDecimal, Account> direction) {
@@ -35,19 +50,15 @@ public class MoneyTransferService {
     }
 
     @Transactional
-    public AccountEntry transferMoney(UUID creditAccount, UUID debitAccount, BigDecimal amount) {
-        List<Account> accounts = accountCrudService.findBy(asList(debitAccount, creditAccount));
-
-        //TODO: ALso Check if different currency
-        if (accounts.size() == 2) {
-            Map<UUID, Account> accountsMap = accounts.stream().collect(toMap(Account::getId, account -> account));
-            boolean solvent = accountsMap.get(creditAccount).isSolvent(amount);
-            if (solvent) {
-                accountsMap.get(creditAccount).changeSaldo(amount, SaldoDirection.DESCREASE_SALDO);
-                accountsMap.get(debitAccount).changeSaldo(amount, SaldoDirection.INCREASE_SALDO);
-                return accountEntryCrudService.create(new AccountEntry(accountsMap.get(creditAccount), accountsMap.get(debitAccount), amount));
-            }
-        }
-        return new AccountEntry();
+    public List<AccountEntry> transferMoney(UUID creditAccount, UUID debitAccount, BigDecimal amount) {
+        List<AccountEntry> accountEntries = of(new Action.Context(new AccountTransferDTO(creditAccount, debitAccount, amount)))
+                .map(fetchAccounts)
+                .filter(byExistance)
+                .filter(byCurrencies)
+                .filter(bySolvency)
+                .peek(changeSaldo)
+                .map(createAccountEntry)
+                .collect(Collectors.toList());
+        return accountEntries.isEmpty() ? ImmutableList.of(new AccountEntry()) : accountEntries;
     }
 }
