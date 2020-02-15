@@ -1,5 +1,7 @@
 package com.revolut.backend.task.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revolut.backend.task.ApplicationConfig;
 import com.revolut.backend.task.entity.Account;
 import org.glassfish.jersey.test.DeploymentContext;
@@ -14,6 +16,7 @@ import static java.util.UUID.nameUUIDFromBytes;
 import static javax.ws.rs.client.Entity.entity;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static org.apache.commons.lang3.StringUtils.isNumeric;
+import static org.eclipse.jetty.http.HttpStatus.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -21,6 +24,7 @@ public class AccountControllerFuncTest extends JerseyTest {
 
     private static final String METADATA = "Test";
     private static final String REQUEST_FAILED = "Request failed.";
+    private static final String BAD_REQUEST = "Bad Request";
     private Account account;
 
     @Override
@@ -36,7 +40,7 @@ public class AccountControllerFuncTest extends JerseyTest {
                 .request()
                 .post(entity(rawAccount, APPLICATION_JSON));
 
-        assertEquals(200, response.getStatus());
+        assertEquals(OK_200, response.getStatus());
 
         account = response.readEntity(Account.class);
 
@@ -48,6 +52,19 @@ public class AccountControllerFuncTest extends JerseyTest {
     }
 
     @Test
+    public void createAccountWithStringCurrencyBad() throws JsonProcessingException {
+        Account rawAccount = new Account(643L, METADATA);
+        ObjectMapper mapper = new ObjectMapper();
+        String postData = mapper.writeValueAsString(rawAccount);
+        postData = postData.replace("643", "\"RUB\"");
+        Response response = target("/account/create")
+                .request()
+                .post(entity(postData, APPLICATION_JSON));
+
+        assertEquals(BAD_REQUEST_400, response.getStatus());
+    }
+
+    @Test
     public void createAccountTestWithoutCurrencyBad() {
         Account rawAccount = new Account();
         rawAccount.setMetadata(METADATA);
@@ -56,7 +73,7 @@ public class AccountControllerFuncTest extends JerseyTest {
                 .request()
                 .post(entity(rawAccount, APPLICATION_JSON));
 
-        assertEquals(500, response.getStatus());
+        assertEquals(INTERNAL_SERVER_ERROR_500, response.getStatus());
         assertEquals(REQUEST_FAILED, response.getStatusInfo().getReasonPhrase());
     }
 
@@ -71,7 +88,7 @@ public class AccountControllerFuncTest extends JerseyTest {
                 .request()
                 .post(entity(account, APPLICATION_JSON));
 
-        assertEquals(500, response.getStatus());
+        assertEquals(INTERNAL_SERVER_ERROR_500, response.getStatus());
         assertEquals(REQUEST_FAILED, response.getStatusInfo().getReasonPhrase());
 
     }
@@ -84,7 +101,7 @@ public class AccountControllerFuncTest extends JerseyTest {
                 .request()
                 .get();
 
-        assertEquals(200, response.getStatus());
+        assertEquals(OK_200, response.getStatus());
 
         Account foundAccount = response.readEntity(Account.class);
 
@@ -103,13 +120,13 @@ public class AccountControllerFuncTest extends JerseyTest {
                 .request()
                 .delete();
 
-        assertEquals(204, deleteResponse.getStatus());
+        assertEquals(NO_CONTENT_204, deleteResponse.getStatus());
 
         Response getResponse = target("/account/" + account.getId())
                 .request()
                 .get();
 
-        assertEquals(204, getResponse.getStatus());
+        assertEquals(NO_CONTENT_204, getResponse.getStatus());
     }
 
     @Test
@@ -122,13 +139,13 @@ public class AccountControllerFuncTest extends JerseyTest {
                 .request()
                 .post(entity(account, APPLICATION_JSON));
 
-        assertEquals(204, updateResponse.getStatus());
+        assertEquals(NO_CONTENT_204, updateResponse.getStatus());
 
         Response getResponse = target("/account/" + account.getId())
                 .request()
                 .get();
 
-        assertEquals(200, getResponse.getStatus());
+        assertEquals(OK_200, getResponse.getStatus());
 
         assertEquals(valueOf(643L), account.getCurrencyId());
         assertEquals("Test_Test", account.getMetadata());
