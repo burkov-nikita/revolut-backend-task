@@ -20,6 +20,7 @@ import static org.junit.Assert.assertTrue;
 public class AccountControllerFuncTest extends JerseyTest {
 
     private static final String METADATA = "Test";
+    private static final String REQUEST_FAILED = "Request failed.";
     private Account account;
 
     @Override
@@ -44,6 +45,35 @@ public class AccountControllerFuncTest extends JerseyTest {
         assertEquals(new BigDecimal("0"), account.getSaldo());
         assertTrue(isNumeric(account.getNum()));
         assertEquals(account.getId().toString(), nameUUIDFromBytes(account.getNum().getBytes()).toString());
+    }
+
+    @Test
+    public void createAccountTestWithoutCurrencyBad() {
+        Account rawAccount = new Account();
+        rawAccount.setMetadata(METADATA);
+
+        Response response = target("/account/create")
+                .request()
+                .post(entity(rawAccount, APPLICATION_JSON));
+
+        assertEquals(500, response.getStatus());
+        assertEquals(REQUEST_FAILED, response.getStatusInfo().getReasonPhrase());
+    }
+
+    @Test
+    public void createAccountWithDefinedPropertiesBad() {
+        this.createAccountTestOk();
+        Account account = this.account;
+
+        account.setMetadata("TESTSTE");
+
+        Response response = target("/account/create")
+                .request()
+                .post(entity(account, APPLICATION_JSON));
+
+        assertEquals(500, response.getStatus());
+        assertEquals(REQUEST_FAILED, response.getStatusInfo().getReasonPhrase());
+
     }
 
     @Test

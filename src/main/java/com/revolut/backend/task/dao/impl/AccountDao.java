@@ -37,7 +37,11 @@ public class AccountDao implements EntityDao<Account> {
     @Override
     @Transactional
     public Account save(Account account) {
-        return entityManager.get().merge(account);
+        if (account.getId() != null) {
+            throw new RuntimeException("You are not allowed to set ID");
+        } else {
+            return entityManager.get().merge(account);
+        }
     }
 
     @Override
