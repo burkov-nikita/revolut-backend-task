@@ -23,8 +23,7 @@ import static org.junit.Assert.assertTrue;
 public class AccountControllerFuncTest extends JerseyTest {
 
     private static final String METADATA = "Test";
-    private static final String REQUEST_FAILED = "Request failed.";
-    private static final String BAD_REQUEST = "Bad Request";
+
     private Account account;
 
     @Override
@@ -74,7 +73,6 @@ public class AccountControllerFuncTest extends JerseyTest {
                 .post(entity(rawAccount, APPLICATION_JSON));
 
         assertEquals(INTERNAL_SERVER_ERROR_500, response.getStatus());
-        assertEquals(REQUEST_FAILED, response.getStatusInfo().getReasonPhrase());
     }
 
     @Test
@@ -89,8 +87,6 @@ public class AccountControllerFuncTest extends JerseyTest {
                 .post(entity(account, APPLICATION_JSON));
 
         assertEquals(INTERNAL_SERVER_ERROR_500, response.getStatus());
-        assertEquals(REQUEST_FAILED, response.getStatusInfo().getReasonPhrase());
-
     }
 
     @Test
