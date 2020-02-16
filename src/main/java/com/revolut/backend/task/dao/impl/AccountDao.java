@@ -18,8 +18,12 @@ import static javax.persistence.LockModeType.PESSIMISTIC_WRITE;
 @Singleton
 public class AccountDao implements EntityDao<Account> {
 
-    @Inject
     private Provider<EntityManager> entityManager;
+
+    @Inject
+    public AccountDao(Provider<EntityManager> entityManager) {
+        this.entityManager = entityManager;
+    }
 
     @Override
     public Account findBy(UUID id) {

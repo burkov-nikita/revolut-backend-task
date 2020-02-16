@@ -9,10 +9,9 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 import java.util.UUID;
 
+import static com.revolut.backend.task.service.AccountGeneratorService.getUUID;
 import static java.lang.String.valueOf;
-import static java.util.UUID.nameUUIDFromBytes;
 import static java.util.stream.Stream.of;
-import static org.apache.commons.lang3.StringUtils.isNumeric;
 
 @Provider
 public class AccountProvider implements ParamConverterProvider {
@@ -25,7 +24,7 @@ public class AccountProvider implements ParamConverterProvider {
 
         @Override
         public UUID fromString(String value) {
-            return isNumeric(value) ? nameUUIDFromBytes(value.getBytes()) : UUID.fromString(value);
+            return getUUID(value);
         }
 
         @Override

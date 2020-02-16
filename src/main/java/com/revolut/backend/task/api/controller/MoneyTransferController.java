@@ -1,6 +1,7 @@
 package com.revolut.backend.task.api.controller;
 
 import com.revolut.backend.task.api.annotation.AccountNumberToUUID;
+import com.revolut.backend.task.dto.AccountTransferDTO;
 import com.revolut.backend.task.entity.AccountEntry;
 import com.revolut.backend.task.service.MoneyTransferService;
 
@@ -27,6 +28,12 @@ public class MoneyTransferController {
                                                            @PathParam("to") @AccountNumberToUUID UUID to,
                                                            @QueryParam("amount") BigDecimal amount) {
         return moneyTransferService.transferMoney(from, to, amount);
+    }
+
+    @POST
+    @Path("batch")
+    public void transferMoneyInBatchMode(List<AccountTransferDTO> entries) {
+        moneyTransferService.transferMoney(entries);
     }
 
     @POST

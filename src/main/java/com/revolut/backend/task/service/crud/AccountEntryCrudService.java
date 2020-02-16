@@ -11,8 +11,12 @@ import java.util.UUID;
 @Singleton
 public class AccountEntryCrudService implements CrudService<AccountEntry> {
 
-    @Inject
     private AccountEntryDao accountEntryDao;
+
+    @Inject
+    public AccountEntryCrudService(AccountEntryDao accountEntryDao) {
+        this.accountEntryDao = accountEntryDao;
+    }
 
     @Override
     public AccountEntry findBy(UUID id) {

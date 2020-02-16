@@ -11,8 +11,12 @@ import java.util.UUID;
 
 public class AccountEntryDao implements EntityDao<AccountEntry> {
 
-    @Inject
     private Provider<EntityManager> entityManager;
+
+    @Inject
+    public AccountEntryDao(Provider<EntityManager> entityManager) {
+        this.entityManager = entityManager;
+    }
 
     @Override
     public AccountEntry findBy(UUID id) {
