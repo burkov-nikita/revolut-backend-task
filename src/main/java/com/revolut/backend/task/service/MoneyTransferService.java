@@ -11,6 +11,7 @@ import com.revolut.backend.task.service.action.*;
 import com.revolut.backend.task.service.action.Action.Context;
 import com.revolut.backend.task.service.crud.AccountCrudService;
 
+import javax.ws.rs.ext.ExceptionMapper;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
@@ -51,14 +52,14 @@ public class MoneyTransferService {
         this.createAccountEntry = createAccountEntry;
     }
 
-    @Transactional
+    @Transactional(rollbackOn = Exception.class)
     public void transferMoney(UUID debitAccount, BigDecimal amount, BiFunction<Account, BigDecimal, Account> direction) {
         logger.info("Transferring to: " + debitAccount + " amount: " + amount );
         accountCrudService.findBy(singletonList(debitAccount))
                 .forEach(account -> account.changeSaldo(amount, direction));
     }
 
-    @Transactional
+    @Transactional(rollbackOn = Exception.class)
     public List<AccountEntry> transferMoney(List<AccountTransferDTO> entities) {
         logger.info("Transferring in batch mode. Size: " + entities.size());
         List<AccountEntry> accountEntries = entities.stream()
@@ -74,7 +75,7 @@ public class MoneyTransferService {
         return accountEntries.isEmpty() ? ImmutableList.of(new AccountEntry()) : accountEntries;
     }
 
-    @Transactional
+    @Transactional(rollbackOn = Exception.class)
     public List<AccountEntry> transferMoney(UUID creditAccount, UUID debitAccount, BigDecimal amount) {
         logger.info("Transferring from: " + creditAccount + " to: " + debitAccount + " amount: " + amount );
         return transferMoney(singletonList(new AccountTransferDTO(creditAccount, debitAccount, amount)));
