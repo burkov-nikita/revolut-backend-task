@@ -3,24 +3,22 @@ package com.revolut.backend.task.service.crud;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.google.inject.persist.Transactional;
-import com.revolut.backend.task.service.AccountGeneratorService;
 import com.revolut.backend.task.dao.impl.AccountDao;
 import com.revolut.backend.task.entity.Account;
 
 import java.util.List;
 import java.util.UUID;
 
+import static com.revolut.backend.task.util.AccountGenerator.generateAccountNumber;
+
 @Singleton
 public class AccountCrudService implements CrudService<Account> {
 
     private AccountDao accountDao;
 
-    private AccountGeneratorService accountGeneratorService;
-
     @Inject
-    public AccountCrudService(AccountDao accountDao, AccountGeneratorService accountGeneratorService) {
+    public AccountCrudService(AccountDao accountDao) {
         this.accountDao = accountDao;
-        this.accountGeneratorService = accountGeneratorService;
     }
 
     @Override
@@ -36,7 +34,7 @@ public class AccountCrudService implements CrudService<Account> {
     @Override
     public Account create(Account entity) {
         if (entity != null && (entity.getNum() == null || entity.getNum().equals(""))) {
-            entity.setNum(accountGeneratorService.generateAccountNumber(entity));
+            entity.setNum(generateAccountNumber(entity));
         }
         return accountDao.save(entity);
     }

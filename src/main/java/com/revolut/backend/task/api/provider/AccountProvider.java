@@ -9,7 +9,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 import java.util.UUID;
 
-import static com.revolut.backend.task.service.AccountGeneratorService.getUUID;
+import static com.revolut.backend.task.util.AccountGenerator.getUUID;
 import static java.lang.String.valueOf;
 import static java.util.stream.Stream.of;
 

@@ -3,7 +3,6 @@ package com.revolut.backend.task.unit;
 import com.revolut.backend.task.dao.impl.AccountDao;
 import com.revolut.backend.task.entity.Account;
 import com.revolut.backend.task.exception.MissedCurrencyIdException;
-import com.revolut.backend.task.service.AccountGeneratorService;
 import com.revolut.backend.task.service.crud.AccountCrudService;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.BeforeClass;
@@ -21,7 +20,7 @@ public class AccountCrudServiceTest {
     @BeforeClass
     public static void init() {
         accountDao = mock(AccountDao.class);
-        service = new AccountCrudService(accountDao, new AccountGeneratorService());
+        service = new AccountCrudService(accountDao);
     }
 
     @Test

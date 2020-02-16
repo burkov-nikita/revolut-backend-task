@@ -8,7 +8,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.UUID;
 
-import static com.revolut.backend.task.service.AccountGeneratorService.getUUID;
+import static com.revolut.backend.task.util.AccountGenerator.getUUID;
 
 @Data
 @AllArgsConstructor

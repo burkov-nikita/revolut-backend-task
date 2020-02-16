@@ -1,7 +1,6 @@
-package com.revolut.backend.task.service;
+package com.revolut.backend.task.util;
 
 
-import com.google.inject.Singleton;
 import com.revolut.backend.task.entity.Account;
 import com.revolut.backend.task.exception.MissedCurrencyIdException;
 
@@ -13,17 +12,16 @@ import static java.util.UUID.fromString;
 import static java.util.UUID.nameUUIDFromBytes;
 import static org.apache.commons.lang3.StringUtils.*;
 
-@Singleton
-public class AccountGeneratorService {
+public class AccountGenerator {
 
     private static final int CHECK_BIT = 0;
 
-    public String generateAccountNumber(Account account) {
+    public static String generateAccountNumber(Account account) {
         if (account.getCurrencyId() == null || account.getCurrencyId() == 0) {
             throw new MissedCurrencyIdException();
         }
 
-        return rightPad(valueOf(new Random().nextInt()), 11, '0') +
+        return rightPad(valueOf(new Random().nextInt(Integer.MAX_VALUE) + 1), 11, '0') +
                 CHECK_BIT +
                 leftPad(account.getCurrencyId().toString(), 3, "0");
     }
