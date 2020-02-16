@@ -13,7 +13,6 @@ ext.lib = [
         guice_persist           : "com.google.inject.extensions:guice-persist:${guiceVersion}",
         commons_lang            : "org.apache.commons:commons-lang3:${commonsLangVersion}",
         junit                   : "junit:junit:${junitVersion}",
-        junit_concurrent        : "com.vmlens:concurrent-junit:1.0.2", //REMOVE?
         jersey_client           : "org.glassfish.jersey.core:jersey-client:${jerseyVersion}",
         guice_junit             : "net.lamberto.junit:guice-junit-runner:${guiceJunitRunnerVersion}",
         jersey_test_provider    : "org.glassfish.jersey.test-framework.providers:jersey-test-framework-provider-jetty:${jerseyVersion}",
@@ -43,7 +42,6 @@ ext.lib_pack = [
         ],
         test       : [
                 ext.lib.junit,
-                ext.lib.junit_concurrent,
                 ext.lib.jersey_client,
                 ext.lib.jersey_test_provider,
                 ext.lib.jersey_test_core,
