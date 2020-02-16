@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revolut.backend.task.ApplicationConfig;
 import com.revolut.backend.task.dto.AccountTransferDTO;
 import com.revolut.backend.task.entity.Account;
-import com.revolut.backend.task.entity.AccountEntry;
 import org.eclipse.jetty.http.HttpStatus;
 import org.glassfish.jersey.test.DeploymentContext;
 import org.glassfish.jersey.test.JerseyTest;

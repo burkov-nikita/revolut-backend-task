@@ -15,12 +15,16 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 import java.util.function.BiFunction;
+import java.util.logging.Logger;
 
 import static java.util.Collections.singletonList;
 import static java.util.stream.Collectors.toList;
 
 @Singleton
 public class MoneyTransferService {
+
+    @Inject
+    Logger logger;
 
     private AccountCrudService accountCrudService;
     private AccountFetcher fetchAccounts;
@@ -49,12 +53,14 @@ public class MoneyTransferService {
 
     @Transactional
     public void transferMoney(UUID debitAccount, BigDecimal amount, BiFunction<Account, BigDecimal, Account> direction) {
+        logger.info("Transferring to: " + debitAccount + " amount: " + amount );
         accountCrudService.findBy(singletonList(debitAccount))
                 .forEach(account -> account.changeSaldo(amount, direction));
     }
 
     @Transactional
     public List<AccountEntry> transferMoney(List<AccountTransferDTO> entities) {
+        logger.info("Transferring in batch mode. Size: " + entities.size());
         List<AccountEntry> accountEntries = entities.stream()
                 .map(Context::new)
                 .map(fetchAccounts)
@@ -64,12 +70,13 @@ public class MoneyTransferService {
                 .peek(changeSaldo)
                 .map(createAccountEntry)
                 .collect(toList());
-
+        logger.info("Transferring in batch mode. Processed: " + entities.size());
         return accountEntries.isEmpty() ? ImmutableList.of(new AccountEntry()) : accountEntries;
     }
 
     @Transactional
     public List<AccountEntry> transferMoney(UUID creditAccount, UUID debitAccount, BigDecimal amount) {
+        logger.info("Transferring from: " + creditAccount + " to: " + debitAccount + " amount: " + amount );
         return transferMoney(singletonList(new AccountTransferDTO(creditAccount, debitAccount, amount)));
     }
 }
