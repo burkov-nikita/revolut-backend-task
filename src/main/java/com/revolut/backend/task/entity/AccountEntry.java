@@ -19,7 +19,7 @@ import java.util.UUID;
 @Table(name = "ACCOUNT_ENTRY")
 public class AccountEntry {
 
-    public AccountEntry(Account debitAccount, Account creditAccount, BigDecimal amount) {
+    public AccountEntry(Account creditAccount, Account debitAccount, BigDecimal amount) {
         this.debitAccount = debitAccount;
         this.creditAccount = creditAccount;
         this.amount = amount;

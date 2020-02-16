@@ -105,7 +105,7 @@ public class MoneyTransferServiceFuncTest extends JerseyTest {
 
         assertEquals(HttpStatus.OK_200, response.getStatus());
 
-        List<Map> result = (List<Map>)response.readEntity(List.class);
+        List<Map> result = (List<Map>) response.readEntity(List.class);
         assertEquals(1, result.size());
         result.forEach(map -> assertNull(map.get("id")));
     }
@@ -182,5 +182,39 @@ public class MoneyTransferServiceFuncTest extends JerseyTest {
 
         assertEquals(saldoFrom, new BigDecimal("150000.00"));
         assertEquals(saldoTo, new BigDecimal("0.00"));
+    }
+
+    @Test
+    public void showStatementTest() {
+        Account from = createAccountAndGet("from");
+        Account to = createAccountAndGet("to");
+
+        target("/transfer/to/" + from.getId())
+                .queryParam("amount", AMOUNT.longValue())
+                .request()
+                .post(json(null));
+
+        target("/transfer/from/{from}/to/{to}")
+                .resolveTemplate("from", from.getId())
+                .resolveTemplate("to", to.getId())
+                .queryParam("amount", AMOUNT.longValue())
+                .request()
+                .post(json(null));
+
+        Response response = target("/account/{id}/statement")
+                .resolveTemplate("id", from.getId())
+                .request()
+                .get();
+
+        assertEquals(HttpStatus.OK_200, response.getStatus());
+
+        List<Map> entries = (List<Map>) response.readEntity(List.class);
+
+        assertEquals(1, entries.size());
+        Map entry = entries.get(0);
+        assertEquals(AMOUNT.doubleValue(), entry.get("amount"));
+        assertEquals(from.getId().toString(), ((Map) entry.get("creditAccount")).get("id"));
+        assertEquals(to.getId().toString(), ((Map) entry.get("debitAccount")).get("id"));
+
     }
 }
