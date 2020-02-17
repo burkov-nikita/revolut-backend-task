@@ -21,7 +21,7 @@ import static org.hibernate.annotations.CacheConcurrencyStrategy.READ_WRITE;
 @Setter
 @NoArgsConstructor
 @ToString
-@Cache(usage = READ_WRITE)
+@Cache(usage = READ_WRITE, region = "account")
 @Table(name = "ACCOUNT")
 public class Account {
 
