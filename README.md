@@ -97,7 +97,7 @@ gradlew appStart
 * **Notes:**
 You can use account number as UUID as well
 
-###Account:Create
+### Account:Create
 * **URL**
 
   /account/create
@@ -146,7 +146,7 @@ You can use account number as UUID as well
 * **Notes:**
 If you don't define the currency id, you'll get an error message.
 
-###Account:Delete
+### Account:Delete
 * **URL**
 
   /account/:id
@@ -172,7 +172,7 @@ If you don't define the currency id, you'll get an error message.
 * **Notes:**
 Delete operation is idempotent. The same result in any way.
 
-###Account:Update
+### Account:Update
 * **URL**
 
   /account/update
@@ -209,7 +209,7 @@ Delete operation is idempotent. The same result in any way.
 * **Notes:**
 This operation can throw data storage exceptions. For example constraint exceptions.
 
-###Account:Statement
+### Account:Statement
 * **URL**
 
   /account/:id/statement
@@ -251,7 +251,7 @@ This operation can throw data storage exceptions. For example constraint excepti
 * **Notes:**
 This operation can throw data storage exceptions. For example constraint exceptions.
 
-###Money Transferring:To
+### Money Transferring:To
 * **URL**
 
   /transfer/to/:to?amount
@@ -282,7 +282,7 @@ This operation can throw data storage exceptions. For example constraint excepti
 * **Notes:**
 This operation does not return anything. This operation is just for the sake of account saldo changing. Account Entries are not created.
 
-###Money Transferring:FromTo
+### Money Transferring:FromTo
 * **URL**
 
   /transfer/from/:from/to/:to?amount
@@ -328,7 +328,7 @@ This operation does not return anything. This operation is just for the sake of 
 * **Notes:**
 The response may be like `[{"id": null, "debitAccount": null, "creditAccount": null, "amount": null}]`. It means that accounts have not existed. For more information you have to see application logs. 
 
-###Money Transferring:In Batch mode
+### Money Transferring:In Batch mode
 * **URL**
 
   /transfer/batch
