@@ -129,6 +129,11 @@ You can use account number as UUID as well
   * **Code:** 400 BAD REQUEST <br />
     **Content:** `Currency id is not specified.`
     
+    OR
+    
+  * **Code:** 400 BAD REQUEST <br />
+    **Content:** `You are not allowed to predefine account id before creation.`
+    
 * **Sample Call:**
 
     ```
@@ -243,22 +248,133 @@ This operation can throw data storage exceptions. For example constraint excepti
 * **Notes:**
 This operation can throw data storage exceptions. For example constraint exceptions.
 
+###Money Transferring:To
+* **URL**
+
+  /transfer/to/:to?amount
+  
+* **Method:**
+
+  `POST`
+  
+*  **Path Params** 
+  
+   `to=[UUID or Account Number]`
+   
+*  **Query Params**
+
+    `amount=[Number]`
+
+* **Success Response:**
+
+  * **Code:** 204 NO CONTENT <br />
+    **Content:** ``                                 
+    
+* **Sample Call:**
+
+    ```
+    POST http://localhost:8080/api/transfer/to/9466670643?amount=100
+    ```
+    
+* **Notes:**
+This operation does not return anything. This operation is just for the sake of account saldo changing. Account Entries are not created.
+
+###Money Transferring:FromTo
+* **URL**
+
+  /transfer/from/:from/to/:to?amount
+  
+* **Method:**
+
+  `POST`
+  
+*  **Path Params** 
+  
+   `from=[UUID or Account Number]; to=[UUID or Account Number]`
+
+*  **Query Params**
+
+    `amount=[Number]`
+
+* **Success Response:**
+
+  * **Code:** 200 OK <br />
+    **Content:** `[{
+                                             "id": "5a1458b3-d344-440b-89bf-966fce31c99f",
+                                             "debitAccount": {
+                                                 "id": "52f7ae88-6f7a-38b2-bbe7-0a6571f590cf",
+                                                 "currencyId": 643,
+                                                 "num": "9466670643",
+                                                 "metadata": "Test"
+                                             },
+                                             "creditAccount": {
+                                                 "id": "ea6e9879-4a78-356c-bb7f-5b555d34686b",
+                                                 "currencyId": 643,
+                                                 "num": "2391150643",
+                                                 "metadata": "Test"
+                                             },
+                                             "amount": 100
+                                         }]`                                             
+    
+* **Sample Call:**
+
+    ```
+    POST http://localhost:8080/api/transfer/from/9466670643to/9466670643?amount=100
+    ```
+    
+* **Notes:**
+The response may be like `[{"id": null, "debitAccount": null, "creditAccount": null, "amount": null}]`. It means that accounts have not existed. For more information you have to see application logs. 
+
+###Money Transferring:In Batch mode
+* **URL**
+
+  /transfer/batch
+  
+* **Method:**
+
+  `POST`
+  
+*  **Path Params** 
+  
+   None
+
+*  **Query Params**
+
+    None
+    
+*  **Request body**
+    
+    JSON data with defined account number `[{
+                                             "creditAccountNumber": "9466670643",
+                                             "debitAccountNumber": "2391150643",
+                                             "amount": 100
+                                           }]`
+                                           
+    OR `[{"creditAccountId": "52f7ae88-6f7a-38b2-bbe7-0a6571f590c",
+          "debitAccountId": "ea6e9879-4a78-356c-bb7f-5b555d34686b",
+          "amount": 100
+           }]`
+    
+* **Success Response:**
+
+  * **Code:** 204 NO CONTENT <br />
+    **Content:** ``                                             
+    
+* **Sample Call:**
+
+    ```
+    POST http://localhost:8080/api/transfer/batch
+    ```
+    
+* **Notes:**
+No response because the operation may take plenty of time and generates a lot of entries. It depends on JSON size in the request. You can control operation with application logs.
+
 ## Built With
 
 * [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
 * [Maven](https://maven.apache.org/) - Dependency Management
 * [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
 
-## Contributing
-
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
-
-## Versioning
-
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
-
 ## Authors
 
-* **Billie Thompson** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
-
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
+* **Burkov Nikita** - *Software Developer* - [GitHub](https://github.com/burkov-nikita/)
