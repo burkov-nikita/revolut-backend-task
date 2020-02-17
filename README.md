@@ -1,6 +1,8 @@
 # Revolut Backend Test
-
 This test is about implementing RESTful API for money transfers between accounts.
+
+## Preface
+The main idea of the application is to make it simple and extendable. UUID and locking on the database allow you to add more replicas and scale money transferring feature. Also, I'm really excited about the batching mode. It may decrease number of requests to datastore and make it more functional.
 
 ## Requirements
 1. You can use Java or Kotlin.
@@ -16,6 +18,7 @@ pre-installed container/server).
 ## Getting Started
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
+
 ### Prerequisites
 
 You don't need to install any additional software to run the application. This application has gradle wrapper for building project purpose. In-memory datastore H2 is used.
