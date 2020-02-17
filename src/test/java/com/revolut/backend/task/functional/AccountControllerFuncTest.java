@@ -47,7 +47,7 @@ public class AccountControllerFuncTest extends JerseyTest {
 
         assertEquals(valueOf(643L), account.getCurrencyId());
         assertEquals(METADATA, account.getMetadata());
-        assertEquals(new BigDecimal("0"), account.getSaldo());
+        assertEquals(0L, account.getSaldo().longValue());
         assertTrue(isNumeric(account.getNum()));
         assertEquals(account.getId().toString(), nameUUIDFromBytes(account.getNum().getBytes()).toString());
     }
@@ -105,7 +105,7 @@ public class AccountControllerFuncTest extends JerseyTest {
 
         assertEquals(valueOf(643L), foundAccount.getCurrencyId());
         assertEquals(METADATA, foundAccount.getMetadata());
-        assertEquals(new BigDecimal("0.00"), foundAccount.getSaldo());
+        assertEquals(0L, foundAccount.getSaldo().longValue());
         assertTrue(isNumeric(foundAccount.getNum()));
         assertEquals(foundAccount.getId().toString(), nameUUIDFromBytes(foundAccount.getNum().getBytes()).toString());
     }
@@ -147,7 +147,7 @@ public class AccountControllerFuncTest extends JerseyTest {
 
         assertEquals(valueOf(643L), account.getCurrencyId());
         assertEquals("Test_Test", account.getMetadata());
-        assertEquals(new BigDecimal("0"), account.getSaldo());
+        assertEquals(0L, account.getSaldo().longValue());
         assertTrue(isNumeric(account.getNum()));
         assertEquals(account.getId().toString(), nameUUIDFromBytes(account.getNum().getBytes()).toString());
     }

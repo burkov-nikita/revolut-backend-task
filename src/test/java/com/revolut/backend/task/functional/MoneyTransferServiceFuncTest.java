@@ -81,7 +81,7 @@ public class MoneyTransferServiceFuncTest extends JerseyTest {
                 .readEntity(Account.class)
                 .getSaldo();
 
-        assertEquals(saldo, new BigDecimal("950000.00"));
+        assertEquals(950000L, saldo.longValue());
     }
 
     @Test
@@ -114,7 +114,7 @@ public class MoneyTransferServiceFuncTest extends JerseyTest {
     public void transferMoneyToFuncTestOk() {
         Account account = createAccountAndGet("Test");
 
-        IntStream.range(0, 1000).forEach(i -> {
+        IntStream.range(0, 1000).parallel().forEach(i -> {
             target("/transfer/to/" + account.getId())
                     .queryParam("amount", AMOUNT.longValue())
                     .request()
@@ -127,7 +127,7 @@ public class MoneyTransferServiceFuncTest extends JerseyTest {
                 .readEntity(Account.class)
                 .getSaldo();
 
-        assertEquals(saldo, new BigDecimal("100000.00"));
+        assertEquals(100000L, saldo.longValue());
     }
 
     @Test
@@ -143,7 +143,7 @@ public class MoneyTransferServiceFuncTest extends JerseyTest {
                     .post(json(null));
         });
 
-        IntStream.range(0, 500).forEach(i -> {
+        IntStream.range(0, 500).parallel().forEach(i -> {
 
             // from-to
             target("/transfer/from/{from}/to/{to}")
@@ -180,8 +180,8 @@ public class MoneyTransferServiceFuncTest extends JerseyTest {
                 .readEntity(Account.class)
                 .getSaldo();
 
-        assertEquals(saldoFrom, new BigDecimal("150000.00"));
-        assertEquals(saldoTo, new BigDecimal("0.00"));
+        assertEquals(150000L, saldoFrom.longValue());
+        assertEquals(0L, saldoTo.longValue());
     }
 
     @Test

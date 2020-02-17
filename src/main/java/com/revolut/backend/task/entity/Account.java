@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 
@@ -13,12 +14,14 @@ import java.util.UUID;
 import java.util.function.BiFunction;
 
 import static java.util.Arrays.asList;
+import static org.hibernate.annotations.CacheConcurrencyStrategy.READ_WRITE;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @ToString
+@Cache(usage = READ_WRITE)
 @Table(name = "ACCOUNT")
 public class Account {
 

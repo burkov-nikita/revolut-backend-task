@@ -20,7 +20,12 @@
             <property name="show_sql" value="true"/>
             <property name="hibernate.show_sql" value="true"/>
             <property name="hibernate.temp.use_jdbc_metadata_defaults" value="false"/>
+            <property name="hibernate.cache.use_second_level_cache" value="true"/>
+            <property name="hibernate.cache.region.factory_class"
+                      value="org.hibernate.cache.ehcache.EhCacheRegionFactory"/>
         </properties>
+
+
     </persistence-unit>
 
 </persistence>

@@ -10,6 +10,7 @@ ext.lib = [
         h2                      : "com.h2database:h2:${h2Version}",
         hibernate_core          : "org.hibernate:hibernate-core:${hibernateVersion}",
         hibernate_entity_manager: "org.hibernate:hibernate-entitymanager:${hibernateVersion}",
+        hibernate_cache         : "org.hibernate:hibernate-ehcache:${hibernateVersion}",
         guice_persist           : "com.google.inject.extensions:guice-persist:${guiceVersion}",
         commons_lang            : "org.apache.commons:commons-lang3:${commonsLangVersion}",
         junit                   : "junit:junit:${junitVersion}",
@@ -38,6 +39,7 @@ ext.lib_pack = [
                 ext.lib.h2,
                 ext.lib.hibernate_core,
                 ext.lib.hibernate_entity_manager,
+                ext.lib.hibernate_cache,
                 ext.lib.guice_persist
         ],
         test       : [
