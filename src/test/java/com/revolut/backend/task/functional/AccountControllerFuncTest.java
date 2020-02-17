@@ -4,14 +4,13 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revolut.backend.task.ApplicationConfig;
 import com.revolut.backend.task.entity.Account;
-import com.revolut.backend.task.exception.NotAllowedIdException;
 import com.revolut.backend.task.exception.MissedCurrencyIdException;
+import com.revolut.backend.task.exception.NotAllowedIdException;
 import org.glassfish.jersey.test.DeploymentContext;
 import org.glassfish.jersey.test.JerseyTest;
 import org.junit.Test;
 
 import javax.ws.rs.core.Response;
-import java.math.BigDecimal;
 
 import static java.lang.Long.valueOf;
 import static java.util.UUID.nameUUIDFromBytes;

@@ -2,7 +2,10 @@
 This test is about implementing RESTful API for money transfers between accounts.
 
 ## Preface
-The main idea of the application is to make it simple and extendable. UUID and locking on the database allow you to add more replicas and scale money transferring feature. Also, I'm really excited about the batching mode. It may decrease number of requests to datastore and make it more functional.
+The main idea of the application is to make it simple and extendable. UUID and locking on the database allow you to add more replicas and scale money transferring feature. 
+Also, I'm really excited about the batching mode. It may decrease the number of requests to datastore and make it more functional. 
+There is a correlation between account UUID and account number to simplify id management and improve the performance of searching for accounts. 
+Furthermore, in perspective of distributed application deployment, it may help to avoid generating "siblings". 
 
 ## Requirements
 1. You can use Java or Kotlin.
@@ -42,11 +45,33 @@ gradlew clean test
 
 ### Test cases
 
-Explain what these tests test and why
+#### Unit tests
+* AccountCrudServiceTest.createAccountWithoutIdButWithCurrency
+* AccountCrudServiceTest.createAccountWithoutIdAndCurrency
+* AccountCrudServiceTest.createAccountNull
+* AccountGeneratorTest.generateAccountNumberTest
+* AccountGeneratorTest.generateAccountNumberWoCurrency
+* AccountGeneratorTest.getUUIDFromUUIDTest
+* AccountGeneratorTest.getUUIDFromNumberTest
+* AccountGeneratorTest.getUUIDFromNullTest
+* SaldoDirectionTest.increaseSaldoTest
+* SaldoDirectionTest.decreaseSaldoTest
+* SaldoDirectionTest.mixSaldoTest
 
-```
-Give an example
-```
+#### Functional tests
+* AccountControllerFuncTest.createAccountTestOk
+* AccountControllerFuncTest.createAccountWithStringCurrencyBad
+* AccountControllerFuncTest.createAccountTestWithoutCurrencyBad
+* AccountControllerFuncTest.createAccountWithDefinedPropertiesBad
+* AccountControllerFuncTest.getAccountTestOk
+* AccountControllerFuncTest.removeAccountTestOk
+* AccountControllerFuncTest.updateAccountTestOk
+* MoneyTransferServiceFuncTest.transferMoneyBatchTestOk
+* MoneyTransferServiceFuncTest.transferMoneyToNoAccountFuncTestBad
+* MoneyTransferServiceFuncTest.transferMoneyFromToNoAccountFuncTest
+* MoneyTransferServiceFuncTest.transferMoneyToFuncTestOk
+* MoneyTransferServiceFuncTest.transferMoneyFromToFuncTest
+* MoneyTransferServiceFuncTest.showStatementTest
 
 ### Start application
 
