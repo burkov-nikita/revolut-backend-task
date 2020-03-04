@@ -7,12 +7,10 @@
          name="cache">
 
     <defaultCache
-            maxEntriesLocalHeap="10000"
-            timeToIdleSeconds="3600"
-            memoryStoreEvictionPolicy="LRU"
+            maxEntriesLocalHeap="100000"
+            timeToIdleSeconds="5"
+            memoryStoreEvictionPolicy="LFU"
             overflowToDisk="false"
     />
-
-    <cache name="account" maxEntriesLocalHeap="10000" eternal="false" timeToLiveSeconds="3600"/>
 
 </ehcache>
