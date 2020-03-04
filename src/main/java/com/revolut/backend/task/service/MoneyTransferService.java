@@ -23,7 +23,6 @@ public class MoneyTransferService {
     private AccountFetcher fetchAccounts;
     private CheckCurrencies byCurrencies;
     private CheckExistance byExistence;
-    private CheckSolvency bySolvency;
     private ChangeSaldo changeSaldo;
     private CreateAccountEntry createAccountEntry;
     private HappyRubAccount happyRubAccount;
@@ -32,13 +31,11 @@ public class MoneyTransferService {
     public MoneyTransferService(AccountFetcher fetchAccounts,
                                 CheckCurrencies byCurrencies,
                                 CheckExistance byExistence,
-                                CheckSolvency bySolvency,
                                 ChangeSaldo changeSaldo,
                                 CreateAccountEntry createAccountEntry,
                                 HappyRubAccount happyRubAccount) {
         this.fetchAccounts = fetchAccounts;
         this.byCurrencies = byCurrencies;
-        this.bySolvency = bySolvency;
         this.byExistence = byExistence;
         this.changeSaldo = changeSaldo;
         this.createAccountEntry = createAccountEntry;
@@ -66,7 +63,6 @@ public class MoneyTransferService {
                 .map(fetchAccounts)
                 .filter(byExistence)
                 .filter(byCurrencies)
-                .filter(bySolvency)
                 .peek(changeSaldo)
                 .forEach(createAccountEntry);
     }
