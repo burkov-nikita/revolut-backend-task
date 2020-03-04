@@ -5,6 +5,7 @@ import com.google.inject.Singleton;
 import com.revolut.backend.task.dao.impl.AccountEntryDao;
 import com.revolut.backend.task.entity.AccountEntry;
 
+import javax.persistence.LockModeType;
 import java.util.List;
 import java.util.UUID;
 
@@ -24,8 +25,13 @@ public class AccountEntryCrudService implements CrudService<AccountEntry> {
     }
 
     @Override
-    public List<AccountEntry> findBy(List ids) {
-        return accountEntryDao.findBy(ids);
+    public AccountEntry findBy(UUID id, LockModeType lockModeType) {
+        return accountEntryDao.findBy(id, lockModeType);
+    }
+
+    @Override
+    public List<AccountEntry> findBy(List<UUID> id, LockModeType lockModeType) {
+        return accountEntryDao.findBy(id, lockModeType);
     }
 
     @Override
@@ -36,6 +42,11 @@ public class AccountEntryCrudService implements CrudService<AccountEntry> {
     @Override
     public void update(AccountEntry entity) {
         accountEntryDao.update(entity);
+    }
+
+    @Override
+    public void update(String query, Object... parameters) {
+        throw new UnsupportedOperationException();
     }
 
     @Override

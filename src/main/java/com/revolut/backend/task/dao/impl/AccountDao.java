@@ -3,12 +3,13 @@ package com.revolut.backend.task.dao.impl;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.Singleton;
-import com.google.inject.persist.Transactional;
 import com.revolut.backend.task.dao.EntityDao;
 import com.revolut.backend.task.entity.Account;
 import com.revolut.backend.task.exception.NotAllowedIdException;
 
 import javax.persistence.EntityManager;
+import javax.persistence.LockModeType;
+import javax.persistence.Query;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -31,16 +32,20 @@ public class AccountDao implements EntityDao<Account> {
     }
 
     @Override
-    public List<Account> findBy(List ids) {
+    public Account findBy(UUID id, LockModeType lockModeType) {
+        return entityManager.get().find(Account.class, id, lockModeType);
+    }
+
+    @Override
+    public List<Account> findBy(List<UUID> id, LockModeType lockModeType) {
         return (List<Account>) entityManager.get()
                 .createQuery("FROM Account a WHERE a.id IN :ids")
-                .setParameter("ids", ids)
-                .setLockMode(PESSIMISTIC_WRITE)
+                .setParameter("ids", id)
+                .setLockMode(lockModeType)
                 .getResultList();
     }
 
     @Override
-    @Transactional
     public Account save(Account account) {
         if (account != null && account.getId() != null) {
             throw new NotAllowedIdException();
@@ -50,16 +55,26 @@ public class AccountDao implements EntityDao<Account> {
     }
 
     @Override
-    @Transactional
     public void delete(UUID id) {
         Optional.ofNullable(entityManager.get().find(Account.class, id))
                 .ifPresent(entity -> entityManager.get().remove(entity));
     }
 
     @Override
-    @Transactional
     public void update(Account account) {
-        Optional.ofNullable(entityManager.get().find(Account.class, account.getId()))
-                .ifPresent(entity -> account.setId(entity.getId()));
+        Optional.ofNullable(entityManager.get().find(Account.class, account.getId(), PESSIMISTIC_WRITE))
+                .ifPresent(entity -> {
+                    entity.setMetadata(account.getMetadata());
+                    entity.setSaldo(account.getSaldo());
+                });
+    }
+
+    @Override
+    public void update(String query, Object... parameters) {
+        Query updateQuery = entityManager.get().createQuery(query);
+        for (int i = 0; i < parameters.length; i++) {
+            updateQuery = updateQuery.setParameter(i, parameters[i]);
+        }
+        updateQuery.executeUpdate();
     }
 }

@@ -7,6 +7,7 @@ import com.revolut.backend.task.service.crud.AccountCrudService;
 import com.revolut.backend.task.service.crud.AccountEntryCrudService;
 
 import javax.inject.Inject;
+import javax.persistence.LockModeType;
 import javax.ws.rs.*;
 import java.util.List;
 import java.util.UUID;
@@ -43,15 +44,17 @@ public class AccountController {
         accountCrudService.delete(id);
     }
 
-    @POST
-    @Path("update")
-    public void updateAccount(Account account) {
+    @PUT
+    @Path("update/{id}")
+    public void updateAccount(@PathParam("id") @AccountNumberToUUID UUID id,
+                              Account account) {
+        account.setId(id);
         accountCrudService.update(account);
     }
 
     @GET
     @Path("{id}/statement")
     public List<AccountEntry> showStatement(@PathParam("id") @AccountNumberToUUID UUID id) {
-        return accountEntryCrudService.findBy(singletonList(id));
+        return accountEntryCrudService.findBy(singletonList(id), LockModeType.NONE);
     }
 }
