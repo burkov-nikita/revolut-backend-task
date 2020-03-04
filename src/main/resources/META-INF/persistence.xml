@@ -11,10 +11,12 @@
         <class>com.revolut.backend.task.entity.AccountEntry</class>
 
         <properties>
+            <property name="javax.persistence.lock.timeout" value="10000"/>
             <property name="javax.persistence.jdbc.driver" value="org.h2.Driver"/>
-            <property name="javax.persistence.jdbc.url" value="jdbc:h2:mem:accounting"/>
+            <property name="javax.persistence.jdbc.url" value="jdbc:h2:mem:accounting;DB_CLOSE_DELAY=-1;LOCK_TIMEOUT=10000"/>
             <property name="javax.persistence.jdbc.user" value="sa"/>
             <property name="javax.persistence.jdbc.password" value=""/>
+
             <property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect"/>
             <property name="hibernate.hbm2ddl.auto" value="create-drop"/>
             <property name="show_sql" value="true"/>

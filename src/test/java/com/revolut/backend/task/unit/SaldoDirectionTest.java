@@ -16,7 +16,7 @@ public class SaldoDirectionTest {
         Account account = new Account();
         BigDecimal amount = new BigDecimal(1000);
         IntStream.range(0, 1000).forEach(i ->
-                account.changeSaldo(amount, SaldoDirection.INCREASE_SALDO)
+                SaldoDirection.INCREASE_SALDO.apply(account, amount)
         );
         assertEquals(new BigDecimal(1000000), account.getSaldo());
     }
@@ -26,7 +26,7 @@ public class SaldoDirectionTest {
         Account account = new Account();
         BigDecimal amount = new BigDecimal(1000);
         IntStream.range(0, 1000).forEach(i ->
-                account.changeSaldo(amount, SaldoDirection.DESCREASE_SALDO)
+                SaldoDirection.DESCREASE_SALDO.apply(account, amount)
         );
         assertEquals(new BigDecimal(-1000000), account.getSaldo());
     }
@@ -36,8 +36,8 @@ public class SaldoDirectionTest {
         Account account = new Account();
         BigDecimal amount = new BigDecimal(1000);
         IntStream.range(0, 1000).forEach(i -> {
-            account.changeSaldo(amount, SaldoDirection.INCREASE_SALDO);
-            account.changeSaldo(amount, SaldoDirection.DESCREASE_SALDO);
+            SaldoDirection.INCREASE_SALDO.apply(account, amount);
+            SaldoDirection.DESCREASE_SALDO.apply(account, amount);
         });
         assertEquals(new BigDecimal(0), account.getSaldo());
     }

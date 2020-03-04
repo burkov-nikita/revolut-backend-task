@@ -132,9 +132,9 @@ public class AccountControllerFuncTest extends JerseyTest {
         Account account = this.account;
         account.setMetadata("Test_Test");
 
-        Response updateResponse = target("account/update/")
+        Response updateResponse = target("account/update/" + account.getId())
                 .request()
-                .post(entity(account, APPLICATION_JSON));
+                .put(entity(account, APPLICATION_JSON));
 
         assertEquals(NO_CONTENT_204, updateResponse.getStatus());
 

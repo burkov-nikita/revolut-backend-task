@@ -14,6 +14,7 @@ import org.junit.Test;
 import javax.ws.rs.core.Response;
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -23,7 +24,7 @@ import static javax.ws.rs.client.Entity.json;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static org.eclipse.jetty.http.HttpStatus.NO_CONTENT_204;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 public class MoneyTransferServiceFuncTest extends JerseyTest {
 
@@ -103,11 +104,7 @@ public class MoneyTransferServiceFuncTest extends JerseyTest {
                 .request()
                 .post(json(null));
 
-        assertEquals(HttpStatus.OK_200, response.getStatus());
-
-        List<Map> result = (List<Map>) response.readEntity(List.class);
-        assertEquals(1, result.size());
-        result.forEach(map -> assertNull(map.get("id")));
+        assertEquals(NO_CONTENT_204, response.getStatus());
     }
 
     @Test
@@ -136,7 +133,7 @@ public class MoneyTransferServiceFuncTest extends JerseyTest {
         Account to = createAccountAndGet("to");
 
         // Fill 'from' account
-        IntStream.range(0, 1000).forEach(i -> {
+        IntStream.range(0, 1000).parallel().forEach(i -> {
             target("/transfer/to/" + from.getId())
                     .queryParam("amount", AMOUNT.longValue())
                     .request()
@@ -210,11 +207,14 @@ public class MoneyTransferServiceFuncTest extends JerseyTest {
 
         List<Map> entries = (List<Map>) response.readEntity(List.class);
 
-        assertEquals(1, entries.size());
-        Map entry = entries.get(0);
-        assertEquals(AMOUNT.doubleValue(), entry.get("amount"));
-        assertEquals(from.getId().toString(), ((Map) entry.get("creditAccount")).get("id"));
-        assertEquals(to.getId().toString(), ((Map) entry.get("debitAccount")).get("id"));
-
+        assertEquals(2, entries.size());
+        AtomicBoolean filterFlag = new AtomicBoolean(false);
+        entries.stream().filter(entry -> ((Map) entry.get("creditAccount")).get("id").equals(from.getId().toString()))
+                .forEach(entry -> {
+                    assertEquals(AMOUNT.doubleValue(), entry.get("amount"));
+                    assertEquals(to.getId().toString(), ((Map) entry.get("debitAccount")).get("id"));
+                    filterFlag.set(true);
+                });
+        assertTrue(filterFlag.get());
     }
 }

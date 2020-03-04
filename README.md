@@ -3,7 +3,7 @@ This test is about implementing RESTful API for money transfers between accounts
 
 ## Preface
 The main idea of the application is to make it simple and extendable. UUID and locking on the database allow you to add more replicas and scale money transferring feature. 
-Also, I'm really excited about the batching mode. It may decrease the number of requests to datastore and make it more functional. 
+Also, I'm really excited about the batching mode. It may decrease the number of requests to application and make it more functional. 
 There is a correlation between account UUID and account number to simplify id management and improve the performance of searching for accounts. 
 Furthermore, in perspective of distributed application deployment, it may help to avoid generating "siblings". 
 
@@ -200,15 +200,15 @@ Delete operation is idempotent. The same result in any way.
 ### Account:Update
 * **URL**
 
-  /account/update
+  /account/update/:id
   
 * **Method:**
 
-  `POST`
+  `PUT`
   
 *  **Path Params** 
   
-    None
+    `id=[UUID or Account Number]`
 
 *  **Request body**
     
@@ -216,19 +216,12 @@ Delete operation is idempotent. The same result in any way.
 
 * **Success Response:**
 
-  * **Code:** 200 OK <br />
-    **Content:** `{
-                          "id": "0b6e1ecd-c998-3c74-aa3a-cf5ce9d6c1e3",
-                          "currencyId": 643,
-                          "num": "726020654000643",
-                          "metadata": "new",
-                          "saldo": 0
-                      }`                                 
+  * **Code:** 204 NO CONTENT <br />                          
     
 * **Sample Call:**
 
     ```
-    POST http://localhost:8080/api/account/update
+    POST http://localhost:8080/api/account/update/0b6e1ecd-c998-3c74-aa3a-cf5ce9d6c1e3
     ```
     
 * **Notes:**
