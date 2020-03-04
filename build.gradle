@@ -56,3 +56,7 @@ sourceSets {
 
     }
 }
+
+test {
+    exclude 'com/revolut/backend/task/stress/**'
+}

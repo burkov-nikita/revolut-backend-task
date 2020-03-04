@@ -1,16 +1,47 @@
 package com.revolut.backend.task.service.action;
 
+import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.revolut.backend.task.util.SaldoDirection;
+import com.google.inject.persist.Transactional;
+import com.revolut.backend.task.dto.AccountTransferDTO;
+import com.revolut.backend.task.entity.Account;
+import com.revolut.backend.task.service.crud.AccountCrudService;
 
+import java.util.Map;
+import java.util.UUID;
 import java.util.function.Consumer;
+
+import static java.util.Arrays.asList;
+import static java.util.stream.Collectors.toMap;
+import static javax.persistence.LockModeType.PESSIMISTIC_WRITE;
 
 @Singleton
 public class ChangeSaldo implements Consumer<Action.Context> {
 
+    private AccountCrudService accountCrudService;
+
+    @Inject
+    public ChangeSaldo(AccountCrudService accountCrudService) {
+        this.accountCrudService = accountCrudService;
+    }
+
     @Override
+    @Transactional(rollbackOn = Exception.class)
     public void accept(Action.Context context) {
-        context.getCreditAccount().changeSaldo(context.getAccountTransferDTO().getAmount(), SaldoDirection.DESCREASE_SALDO);
-        context.getDebitAccount().changeSaldo(context.getAccountTransferDTO().getAmount(), SaldoDirection.INCREASE_SALDO);
+        AccountTransferDTO dto = context.getAccountTransferDTO();
+
+        Map<UUID, Account> accounts = accountCrudService.findBy(asList(dto.getCreditAccountId(), dto.getDebitAccountId()), PESSIMISTIC_WRITE)
+                .stream()
+                .collect(toMap(Account::getId, account -> account));
+
+        accountCrudService.update("UPDATE Account SET saldo = saldo - ?0 WHERE id = ?1",
+                context.getAccountTransferDTO().getAmount(),
+                accounts.get(dto.getCreditAccountId()).getId());
+
+        accountCrudService.update("UPDATE Account SET saldo = saldo + ?0 WHERE id = ?1",
+                context.getAccountTransferDTO().getAmount(),
+                accounts.get(dto.getDebitAccountId()).getId());
+
+
     }
 }

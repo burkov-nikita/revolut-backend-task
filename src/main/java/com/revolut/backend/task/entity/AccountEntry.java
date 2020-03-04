@@ -31,14 +31,6 @@ public class AccountEntry {
     @Column(name = "ID")
     private UUID id;
 
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
     @OneToOne
     @JoinColumn(name = "debit_account_num", referencedColumnName = "id")
     @JsonIgnoreProperties({"saldo"})

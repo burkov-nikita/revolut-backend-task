@@ -4,30 +4,30 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.UUID;
-import java.util.function.BiFunction;
-
-import static java.util.Arrays.asList;
-import static org.hibernate.annotations.CacheConcurrencyStrategy.READ_WRITE;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @ToString
-@Cache(usage = READ_WRITE, region = "account")
 @Table(name = "ACCOUNT")
 public class Account {
 
     public Account(Long currencyId, String metadata) {
         this.currencyId = currencyId;
         this.metadata = metadata;
+    }
+
+    public Account(Long currencyId, BigDecimal saldo, String metadata) {
+        this.currencyId = currencyId;
+        this.metadata = metadata;
+        this.saldo = saldo;
     }
 
     @Id
@@ -53,15 +53,4 @@ public class Account {
 
     @Column(name = "SALDO")
     private BigDecimal saldo = new BigDecimal(0);
-
-    public Account changeSaldo(BigDecimal amount, BiFunction<Account, BigDecimal, Account> function) {
-        function.apply(this, amount);
-        return this;
-    }
-
-    public boolean isSolvent(BigDecimal amount) {
-        return asList(0, 1).contains(saldo
-                .subtract(amount)
-                .compareTo(new BigDecimal(0)));
-    }
 }
