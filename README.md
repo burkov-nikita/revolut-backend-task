@@ -73,6 +73,9 @@ gradlew clean test
 * MoneyTransferServiceFuncTest.transferMoneyFromToFuncTest
 * MoneyTransferServiceFuncTest.showStatementTest
 
+### Stress tests
+* TransferStressTest.transferAllAndConcurrent
+
 ### Start application
 
 To start application you have to execute gradlew command from root of the project. 
