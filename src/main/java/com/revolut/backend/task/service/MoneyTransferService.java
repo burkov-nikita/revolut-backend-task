@@ -1,25 +1,19 @@
 package com.revolut.backend.task.service;
 
-import com.google.common.collect.ImmutableList;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.google.inject.persist.Transactional;
 import com.revolut.backend.task.dto.AccountTransferDTO;
-import com.revolut.backend.task.entity.Account;
-import com.revolut.backend.task.entity.AccountEntry;
 import com.revolut.backend.task.service.action.*;
 import com.revolut.backend.task.service.action.Action.Context;
 import com.revolut.backend.task.service.crud.AccountCrudService;
+import com.revolut.backend.task.util.HappyRubAccount;
 
-import javax.ws.rs.ext.ExceptionMapper;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
-import java.util.function.BiFunction;
 import java.util.logging.Logger;
 
 import static java.util.Collections.singletonList;
-import static java.util.stream.Collectors.toList;
 
 @Singleton
 public class MoneyTransferService {
@@ -34,6 +28,7 @@ public class MoneyTransferService {
     private CheckSolvency bySolvency;
     private ChangeSaldo changeSaldo;
     private CreateAccountEntry createAccountEntry;
+    private HappyRubAccount happyRubAccount;
 
     @Inject
     public MoneyTransferService(AccountCrudService accountCrudService,
@@ -42,7 +37,8 @@ public class MoneyTransferService {
                                 CheckExistance byExistence,
                                 CheckSolvency bySolvency,
                                 ChangeSaldo changeSaldo,
-                                CreateAccountEntry createAccountEntry) {
+                                CreateAccountEntry createAccountEntry,
+                                HappyRubAccount happyRubAccount) {
         this.accountCrudService = accountCrudService;
         this.fetchAccounts = fetchAccounts;
         this.byCurrencies = byCurrencies;
@@ -50,34 +46,35 @@ public class MoneyTransferService {
         this.byExistence = byExistence;
         this.changeSaldo = changeSaldo;
         this.createAccountEntry = createAccountEntry;
+        this.happyRubAccount = happyRubAccount;
     }
 
-    @Transactional(rollbackOn = Exception.class)
-    public void transferMoney(UUID debitAccount, BigDecimal amount, BiFunction<Account, BigDecimal, Account> direction) {
-        logger.info("Transferring to: " + debitAccount + " amount: " + amount );
-        accountCrudService.findBy(singletonList(debitAccount))
-                .forEach(account -> account.changeSaldo(amount, direction));
+    //@Transactional(rollbackOn = Exception.class)
+    public void transferMoney(UUID debitAccount, BigDecimal amount) {
+        logger.info("Transferring to: " + debitAccount + " amount: " + amount);
+        transferMoney(singletonList(new AccountTransferDTO(happyRubAccount.getAccount().getId(), debitAccount, amount)));
     }
 
-    @Transactional(rollbackOn = Exception.class)
-    public List<AccountEntry> transferMoney(List<AccountTransferDTO> entities) {
+    //@Transactional(rollbackOn = Exception.class)
+    public void transferMoney(List<AccountTransferDTO> entities) {
         logger.info("Transferring in batch mode. Size: " + entities.size());
-        List<AccountEntry> accountEntries = entities.stream()
+        process(entities);
+    }
+
+    //@Transactional(rollbackOn = Exception.class)
+    public void transferMoney(UUID creditAccount, UUID debitAccount, BigDecimal amount) {
+        logger.info("Transferring from: " + creditAccount + " to: " + debitAccount + " amount: " + amount);
+        transferMoney(singletonList(new AccountTransferDTO(creditAccount, debitAccount, amount)));
+    }
+
+    private void process(List<AccountTransferDTO> entities) {
+        entities.stream()
                 .map(Context::new)
                 .map(fetchAccounts)
                 .filter(byExistence)
                 .filter(byCurrencies)
                 .filter(bySolvency)
                 .peek(changeSaldo)
-                .map(createAccountEntry)
-                .collect(toList());
-        logger.info("Transferring in batch mode. Processed: " + entities.size());
-        return accountEntries.isEmpty() ? ImmutableList.of(new AccountEntry()) : accountEntries;
-    }
-
-    @Transactional(rollbackOn = Exception.class)
-    public List<AccountEntry> transferMoney(UUID creditAccount, UUID debitAccount, BigDecimal amount) {
-        logger.info("Transferring from: " + creditAccount + " to: " + debitAccount + " amount: " + amount );
-        return transferMoney(singletonList(new AccountTransferDTO(creditAccount, debitAccount, amount)));
+                .forEach(createAccountEntry);
     }
 }
